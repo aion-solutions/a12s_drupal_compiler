@@ -1,0 +1,26 @@
+@use "sass:map";
+@use "sass:meta";
+<% itemRootType.forEach(function(item){ %>
+@use "abstract/variables/theme/<%= item %>"; <% }); %>
+@use "abstract/functions";
+@use "abstract/functions/variables-helpers" as helpers;
+@use "abstract/mixins";
+
+$-variables-per-breakpoint: ();
+<% itemRootType.forEach(function(item){ %>
+$-variables-per-breakpoint: helpers.gather-root-variables($-variables-per-breakpoint, meta.module-variables("<%= item %>")); <% }); %>
+
+:root {
+  @if map.has-key($-variables-per-breakpoint, "") {
+    @include helpers.print-css-variables(map-get($-variables-per-breakpoint, ""));
+    $-variables-per-breakpoint: map.remove($-variables-per-breakpoint, "");
+  }
+
+  @each $breakpoint in mixins.get-breakpoint-keys() {
+    @if map.has-key($-variables-per-breakpoint, $breakpoint) {
+      @include mixins.media-breakpoint-up($breakpoint) {
+        @include helpers.print-css-variables(map.get($-variables-per-breakpoint, $breakpoint));
+      }
+    }
+  }
+}

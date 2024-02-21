@@ -1,0 +1,8 @@
+// stylelint-disable property-disallowed-list
+$icon-font-base-name: "<%= fontName %>";
+$icon-font-path: "<%= fontPath %>";
+$icon-font-class-prefix: "<%= classNamePrefix %>";
+
+$font-icons: (<% glyphs.forEach(function(glyph){ %>
+    <%= glyph.name %>: "\<%= glyph.content %>", <% }); %>
+);
