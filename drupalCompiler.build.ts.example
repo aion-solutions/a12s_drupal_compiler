@@ -1,0 +1,7 @@
+module.exports = {
+  "paths": [
+    "web/modules/custom",
+    "web/themes/custom",
+    "web/modules/contrib/a12s",
+  ],
+};

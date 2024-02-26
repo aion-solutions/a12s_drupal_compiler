@@ -35,25 +35,36 @@ export default class Configuration {
       components: new Map(),
     }
 
-    // Get the value of "paths" option.
-    config.default.paths = (program.getOptionValue("paths") || config.default.paths || []).map((path: string) => path.trim());
+    const customConfigFile = path.resolve(config.default.drupalRoot, 'drupalCompiler.build.ts');
 
-    try {
-      // Explore the different paths.
-      config.default.paths.forEach(p => {
-        glob.sync(path.resolve(config.default.drupalRoot, p) + this.GLOB_PATTERN, {ignore: this.GLOB_PARSE_IGNORE}).map(file => {
-          const contentFile = JSON.parse(fs.readFileSync(file).toString("utf8"));
-          contentFile.componentPath = path.dirname(file);
-          config.components.set(path.basename(contentFile.componentPath), contentFile);
-        });
+    return new Promise((resolve) => {
+      fs.open(customConfigFile, 'r', (error) => {
+        if (!error) {
+          const customConfig = require(customConfigFile);
+          merge(config.default, customConfig);
+        }
+
+        // Get the value of "paths" option.
+        config.default.paths = (program.getOptionValue("paths") || config.default.paths || []).map((path: string) => path.trim());
+
+        try {
+          // Explore the different paths.
+          config.default.paths.forEach(p => {
+            glob.sync(path.resolve(config.default.drupalRoot, p) + this.GLOB_PATTERN, {ignore: this.GLOB_PARSE_IGNORE}).map(file => {
+              const contentFile = JSON.parse(fs.readFileSync(file).toString("utf8"));
+              contentFile.componentPath = path.dirname(file);
+              config.components.set(path.basename(contentFile.componentPath), contentFile);
+            });
+          });
+        }
+        catch (err) {
+          console.error(err);
+        }
+
+        this.configuration = config;
+        resolve(config);
       });
-    }
-    catch (err) {
-      console.log(err);
-    }
-
-    this.configuration = config;
-    return config;
+    });
   }
 
   public async loopOverComponents(callback: (name: string, config: ConfigurationDefinition.Partial) => Promise<void>) {

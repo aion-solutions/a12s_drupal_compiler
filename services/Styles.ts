@@ -28,10 +28,10 @@ export class Styles {
    */
   public async generate() {
     const config = await Configuration.get();
-    await config.loopOverComponents(async (name: string, { scss, componentPath }: ConfigurationDefinition.Partial) => {
-      if (scss !== undefined && scss.enabled) {
-        await this.clean(componentPath, scss);
-        await this.compile(componentPath, scss);
+    await config.loopOverComponents(async (name: string, componentConfig: ConfigurationDefinition.Partial) => {
+      if (componentConfig.scss !== undefined && componentConfig.scss.enabled) {
+        await this.clean(componentConfig.componentPath, componentConfig.scss);
+        await this.compile(componentConfig.componentPath, componentConfig.scss, componentConfig);
       }
     });
 
@@ -90,7 +90,7 @@ export class Styles {
 
     if (level < 1) {
       for (const [key, entry] of Object.entries(item)) {
-        if (['variables', 'type', 'label', 'dependencies'].includes(key)) {
+        if (['variables', 'types', 'label', 'dependencies'].includes(key)) {
           continue;
         }
 
@@ -108,10 +108,10 @@ export class Styles {
    */
   public async createVariablesFromTheme(rootPath: string, config: ConfigurationDefinition.Scss) {
     const sassFile = await getThemeSassDefinitionFile(rootPath);
-    const destinationDir = path.resolve(rootPath, config.pathVariables);
+    const destinationDir = path.resolve(rootPath, config.variablesPath);
 
     // Make sure the "_root.scss" file exist.
-    const file = await fs.createWriteStream(path.resolve(destinationDir, `_root.scss`));
+    const file = await fs.createWriteStream(path.resolve(destinationDir, '_root.scss'));
     file.end();
 
     if (sassFile) {
@@ -151,7 +151,7 @@ export class Styles {
       indexFile.end();
 
       // Create a root file with components that have root type.
-      const rootFile = await fs.createWriteStream(path.resolve(rootPath, config.pathScss, `_root.scss`));
+      const rootFile = await fs.createWriteStream(path.resolve(rootPath, config.scssPath, '_root.scss'));
       let content = fs.readFileSync('./templates/_root.default.scss.ejs', 'utf8');
 
       rootFile.write(ejs.render(content, {itemRootType: itemRootType}));
@@ -166,9 +166,34 @@ export class Styles {
    *
    * @returns {Promise}
    */
-  public async compile(rootPath: string, config: ConfigurationDefinition.Scss) {
+  public async compile(rootPath: string, config: ConfigurationDefinition.Scss, fullConfig: ConfigurationDefinition.Partial) {
     if (config.enabled) {
-      if (config.pathVariables) {
+      if (config.variablesPath) {
+        const indexFilePath = path.resolve(rootPath, config.variablesPath, '../_index.scss');
+        const indexFile = await fs.createWriteStream(indexFilePath);
+        let content = fs.readFileSync('./templates/_index.scss.ejs', 'utf8');
+        const indexContext = {
+          iconsEnabled: fullConfig.icons?.enabled || false,
+          baseThemeVariablesPath: '',
+        };
+
+        // @todo Support base theme.
+//        if (config.baseTheme) {
+//          const baseThemeVariablesPath = config.baseThemeVariablesPath || config.variablesPath;
+//          const baseThemeVariablesFile = path.resolve(rootPath, config.baseTheme, baseThemeVariablesPath, '../_index.scss');
+//
+//          try {
+//            fs.accessSync(baseThemeVariablesFile, fs.constants.R_OK);
+//            indexContext.baseThemeVariablesPath = path.relative(path.resolve(indexFilePath, '..'), path.resolve(baseThemeVariablesFile, '..'));
+//          }
+//          catch (err) {
+//            console.error(`The base theme file ${baseThemeVariablesFile} cannot be found.`);
+//          }
+//        }
+
+        indexFile.write(ejs.render(content, indexContext));
+        indexFile.end();
+
         await this.createVariablesFromTheme(rootPath, config);
       }
 
@@ -190,7 +215,8 @@ export class Styles {
         }))
         .pipe(prefix(config.autoPrefixerBrowsers, { cascade: true }))
         .pipe(await sourcemaps.write((config.sourceMapEmbed) ? null : './'))
-        .pipe(await gulp.dest((file) => {
+        //.pipe(await gulp.dest((file) => {
+        .pipe(gulp.dest((file) => {
           const rootFolder = path.resolve(rootPath, file.base);
           let dest = '';
 
@@ -229,6 +255,10 @@ export class Styles {
     }
     else {
       await del(path.resolve(rootPath, config.dest) + pattern, {force: true})
+    }
+
+    if (config.variablesPath) {
+      await del(path.resolve(rootPath, config.variablesPath, '../_index.scss'), {force: true})
     }
 
     await del(path.resolve(rootPath, '/components') + pattern, {force: true})

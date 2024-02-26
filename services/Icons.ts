@@ -10,6 +10,7 @@ import * as fs from "fs";
 import Configuration from "./Configuration";
 import {PathLike} from "fs";
 import {Configuration as ConfigurationDefinition} from "../types";
+import { Stream } from 'stream';
 
 export class Icons {
 
@@ -20,7 +21,7 @@ export class Icons {
    *
    * @return {Promise}
    */
-  public async generate() {
+  public async generate(): Promise<any> {
     const config = await Configuration.get();
 
     await config.loopOverComponents(async (name: string, { icons, componentPath }: ConfigurationDefinition.Partial) => {
@@ -37,7 +38,7 @@ export class Icons {
    *
    * @return {Promise}
    */
-  public async create(rootPath: string, iconName: string, config: ConfigurationDefinition.Icons) {
+  public async create(rootPath: string, iconName: string, config: ConfigurationDefinition.Icons): Promise<any> {
     if (config.enabled && config.src) {
       const src = path.resolve(rootPath, config.src);
 
@@ -65,27 +66,10 @@ export class Icons {
           return;
         }
 
-        stream.on('glyphs', (glyphs: any) => {
-          const iconData = {
-            glyphs: glyphs.map((glyph: any) => ({
-              name: glyph.name,
-              content: glyph.unicode[0].toString(16).toUpperCase(),
-            })),
-            fontName: iconName,
-            fontPath: config.fontPathPrefix,
-            classNamePrefix: config.classNamePrefix,
-          };
-
-          const srcFileContents = fs.readFileSync(srcFile, 'utf8');
-
-          if (!srcFileContents) {
-            return;
-          }
-
-          const result = ejs.render(srcFileContents, iconData);
-          const destFile = path.join(destDir, path.basename(srcFile.replace('.ejs', '')));
-
-          fs.writeFileSync(destFile, result);
+        await this.writeGlyphs(stream, srcFile, destDir, {
+          fontName: iconName,
+          fontPath: config.fontPathPrefix,
+          classNamePrefix: config.classNamePrefix,
         });
       }
 
@@ -96,12 +80,38 @@ export class Icons {
     return;
   }
 
+  protected async writeGlyphs(stream: Stream, srcFile: string, destDir: string, settings: any) {
+    return new Promise((resolve, reject) => {
+      stream.on('glyphs', (glyphs: any) => {
+        const iconData = _.merge({}, settings, {
+          glyphs: glyphs.map((glyph: any) => ({
+            name: glyph.name,
+            content: glyph.unicode[0].toString(16).toUpperCase(),
+          })),
+        });
+
+        const srcFileContents = fs.readFileSync(srcFile, 'utf8');
+
+        if (!srcFileContents) {
+          resolve(`The template ${srcFile} for icon settings was not found or is empty.`);
+          return;
+        }
+
+        const result = ejs.render(srcFileContents, iconData);
+        const destFile = path.join(destDir, path.basename(srcFile.replace('.ejs', '')));
+
+        fs.writeFileSync(destFile, result);
+        resolve(`Icons settings written to file ${destFile}.`);
+      });
+    })
+  }
+
   /**
    * Clean the old files.
    *
    * @return {Promise}
    */
-  public async clean(rootPath: string, iconName: string, config: ConfigurationDefinition.Icons) {
+  public async clean(rootPath: string, iconName: string, config: ConfigurationDefinition.Icons): Promise<any> {
     const dest = path.resolve(rootPath, config.dest);
     const toClean = [path.join(dest, `${iconName}.*`)];
 

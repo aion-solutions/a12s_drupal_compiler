@@ -1,0 +1,17 @@
+{
+
+  "icons": {
+    "enabled": true,
+    "src": "src/icons/src/*.svg",
+    "dest": "assets/font-icon/"
+  },
+
+  "scss": {
+    "variablesPath": "src/scss/abstract/variables/theme",
+    "src": [
+      "src/scss/**/*.scss",
+      "templates/patterns/**/*.scss"
+    ],
+    "dest": "assets/css/"
+  }
+}

@@ -36,11 +36,15 @@ export declare namespace Configuration {
 
     dest: string;
 
-    pathVariables: string;
+    baseTheme: string|null;
+
+    baseThemeVariablesPath: string|null;
+
+    variablesPath?: string;
 
     excludesWatch: string[];
 
-    pathScss: string;
+    scssPath: string|null;
 
     // @todo: set type
     debug: any;
@@ -120,7 +124,6 @@ export declare namespace Configuration {
   }
 
 }
-
 
 
 export declare namespace Configuration {

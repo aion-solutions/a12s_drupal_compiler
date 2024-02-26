@@ -8,6 +8,7 @@ module.exports = {
   drupalRoot: "../",
 
   paths: [
+    "web/modules/contrib/a12s",
     "web/modules/custom",
     "web/themes/custom"
   ],
@@ -18,7 +19,7 @@ module.exports = {
    * https://github.com/nfroidure/gulp-iconfont
    */
   icons: {
-    enabled: true,
+    enabled: false,
     fontPathPrefix: "../font-icon/",
     classNamePrefix: "fi", // Font Icon
     autohint: false,
@@ -44,12 +45,12 @@ module.exports = {
    */
   scss: {
     enabled: true,
-    pathVariables: "src/scss/abstract/variables/theme",
+    variablesPath: null,
     excludesWatch: [
       "src/scss/abstract/variables/theme/**/*.scss",
       "src/scss/_root.scss",
     ],
-    pathScss: "src/scss",
+    scssPath: "src/scss",
     flattenDestOutput: true,
     lint: {
       enabled: true,

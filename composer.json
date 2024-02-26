@@ -1,0 +1,9 @@
+{
+  "name": "aion-solutions/a12s_drupal_compiler",
+  "type": "drupal-library",
+  "description": "Helper for compiling JavaScript, Sass and icon files for Drupal.",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0-or-later",
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
