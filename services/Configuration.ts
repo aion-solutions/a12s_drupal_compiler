@@ -45,13 +45,13 @@ export default class Configuration {
         }
 
         // Get the value of "paths" option.
-        config.default.paths = (program.getOptionValue("paths") || config.default.paths || []).map((path: string) => path.trim());
+        config.default.paths = (program.getOptionValue('paths') || config.default.paths || []).map((path: string) => path.trim());
 
         try {
           // Explore the different paths.
           config.default.paths.forEach(p => {
             glob.sync(path.resolve(config.default.drupalRoot, p) + this.GLOB_PATTERN, {ignore: this.GLOB_PARSE_IGNORE}).map(file => {
-              const contentFile = JSON.parse(fs.readFileSync(file).toString("utf8"));
+              const contentFile = JSON.parse(fs.readFileSync(file).toString('utf8'));
               contentFile.componentPath = path.dirname(file);
               config.components.set(path.basename(contentFile.componentPath), contentFile);
             });

@@ -16,8 +16,8 @@ const webpack = new Webpack();
 const program = new Command();
 program
   .allowUnknownOption()
-  .option("-p, --paths [PATH...]", "Specified the paths to process", "")
-  .option("-t, --types [TYPES...]", "Defines the file tasks to process, for example 'js', 'css', 'icons'", ['js', 'css', 'icons']);
+  .option("-p, --paths [PATH...]", "The paths to process", [])
+  .option("-t, --types [TYPES...]", "The tasks to process, for example 'js', 'css', 'icons'", ['js', 'css', 'icons']);
 program.parse();
 
 gulp.task('parse-configuration', Configuration.get);

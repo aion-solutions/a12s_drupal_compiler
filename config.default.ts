@@ -8,7 +8,6 @@ module.exports = {
   drupalRoot: "../",
 
   paths: [
-    "web/modules/contrib/a12s",
     "web/modules/custom",
     "web/themes/custom"
   ],
