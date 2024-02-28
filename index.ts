@@ -16,7 +16,7 @@ const webpack = new Webpack();
 const program = new Command();
 program
   .allowUnknownOption()
-  .option("-p, --paths [PATH...]", "The paths to process", [])
+  .option("-p, --paths [PATH...]", "The paths to process")
   .option("-t, --types [TYPES...]", "The tasks to process, for example 'js', 'css', 'icons'", ['js', 'css', 'icons']);
 program.parse();
 
