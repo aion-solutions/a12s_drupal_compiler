@@ -16,7 +16,7 @@
     "configuration": "gulp --gulpfile index.ts parse-configuration",
     "build": "NODE_ENV=production gulp --require @babel/register --gulpfile index.ts build",
     "watch": "NODE_ENV=production gulp --require @babel/register --gulpfile index.ts watch-files",
-    "build-dev": "gulp --require @babel/register --gulpfile index.js build theme",
+    "build-dev": "gulp --require @babel/register --gulpfile index.ts build",
     "build-js-dev": "gulp --require @babel/register --gulpfile build js",
     "build-css-dev": "gulp --require @babel/register --gulpfile build css",
     "build-css-icons-dev": "gulp --require @babel/register --gulpfile build cssIcons"
