@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "System of compilation for css, scss and icons.",
   "license": "UNLICENSED",
+  "type": "module",
   "main": "build/index.ts",
   "author": {
     "name": "Aïon Solutions",
