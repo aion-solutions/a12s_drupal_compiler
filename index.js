@@ -42,4 +42,6 @@ gulp.task('help', function(done) {
 const build = gulp.series(...buildSeriesArgs);
 gulp.task('build', build);
 
-export { build as default, program };
+module.exports = build;
+module.exports.program = program;
+

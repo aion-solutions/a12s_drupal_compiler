@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "System of compilation for css, scss and icons.",
   "license": "UNLICENSED",
-  "main": "build/index.ts",
-  "type": "module",
+  "main": "./index.js",
   "author": {
     "name": "Aïon Solutions",
     "url": "https://www.aion-solutions.lu"
@@ -12,12 +11,12 @@
   "keywords": [
     "drupal"
   ],
-  "bin": "bin/compile.ts",
+  "bin": "./bin/compile.js",
   "scripts": {
-    "help": "gulp --gulpfile --types css js index.ts help",
-    "configuration": "gulp --gulpfile index.ts parse-configuration",
-    "build": "NODE_ENV=production gulp --gulpfile index.ts build",
-    "build-dev": "gulp --gulpfile index.ts build",
+    "help": "gulp --gulpfile --types css js index.js help",
+    "configuration": "gulp --gulpfile index.js parse-configuration",
+    "build": "NODE_ENV=production gulp --gulpfile index.js build",
+    "build-dev": "gulp --gulpfile index.js build",
     "build-css-dev": "gulp --gulpfile build css",
     "build-css-icons-dev": "gulp --gulpfile build cssIcons"
   },
@@ -39,8 +38,6 @@
     "lodash": "^4.17.21",
     "sass": "^1.62.0",
     "style-loader": "^3.3.1",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.3.3",
     "yaml": "^2.3.4"
   }
 }

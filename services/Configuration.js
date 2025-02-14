@@ -1,22 +1,19 @@
-const { Configuration: ConfigurationDefinition } = require("../types");
 const { merge } = require("lodash");
 const path = require("path");
 const { glob } = require("glob");
 const fs = require("fs");
 
-export default class Configuration {
+class Configuration {
 
-  readonly GLOB_PATTERN: string = "/**/**/drupalCompiler.config.json";
+  GLOB_PATTERN = "/**/**/drupalCompiler.config.json";
 
-  readonly GLOB_PARSE_IGNORE: string[] = ["**/node_modules/**", "**/vendor/**"];
+  GLOB_PARSE_IGNORE = ["**/node_modules/**", "**/vendor/**"];
 
-  protected static instance: Configuration;
+  static instance;
 
-  protected configuration: ConfigurationDefinition.Parsed;
+  constructor() {}
 
-  protected constructor() {}
-
-  public static get(): Promise<Configuration> {
+  static get() {
     return new Promise(async (resolve, reject) => {
       if (!Configuration.instance) {
         Configuration.instance = new Configuration();
@@ -27,12 +24,12 @@ export default class Configuration {
     });
   }
 
-  protected async parseConfiguration() {
+  async parseConfiguration() {
     // Define the default configuration.
-    const config: ConfigurationDefinition.Parsed = {
+    const config = {
       default: require("../config.default"),
       components: new Map(),
-    }
+    };
 
     const customConfigFile = path.resolve(config.default.drupalRoot, 'drupalCompiler.build.ts');
 
@@ -46,7 +43,7 @@ export default class Configuration {
         try {
           // Explore the different paths.
           config.default.paths.forEach(p => {
-            glob.sync(path.resolve(config.default.drupalRoot, p) + this.GLOB_PATTERN, {ignore: this.GLOB_PARSE_IGNORE}).map(file => {
+            glob.sync(path.resolve(config.default.drupalRoot, p) + this.GLOB_PATTERN, { ignore: this.GLOB_PARSE_IGNORE }).map(file => {
               const contentFile = JSON.parse(fs.readFileSync(file).toString('utf8'));
               contentFile.componentPath = path.dirname(file);
               config.components.set(path.basename(contentFile.componentPath), contentFile);
@@ -63,11 +60,12 @@ export default class Configuration {
     });
   }
 
-  public async loopOverComponents(callback: (name: string, config: ConfigurationDefinition.Partial) => Promise<void>) {
+  async loopOverComponents(callback) {
     for (let [name, componentConfig] of this.configuration.components) {
       const config = merge({}, this.configuration.default, componentConfig);
       await callback(name, config);
     }
   }
-
 }
+
+module.exports = Configuration;

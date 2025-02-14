@@ -1,4 +1,3 @@
-const { Configuration: ConfigurationDefinition } = require("../types");
 const { getThemeSassDefinitionFile } = require("./drupalTheme");
 const sourcemaps = require("gulp-sourcemaps");
 const Configuration = require("./Configuration");
@@ -14,16 +13,16 @@ const del = require("del");
 const os = require("os");
 const fs = require("fs");
 
-export class Styles {
+class Styles {
 
   /**
    * Gulp task; generate the styles.
    *
    * @return {Promise}
    */
-  public async generate() {
+  async generate() {
     const config = await Configuration.get();
-    await config.loopOverComponents(async (name: string, componentConfig: ConfigurationDefinition.Partial) => {
+    await config.loopOverComponents(async (name, componentConfig) => {
       if (componentConfig.scss !== undefined && componentConfig.scss.enabled) {
         await this.clean(componentConfig.componentPath, componentConfig.scss);
         await this.compile(componentConfig.componentPath, componentConfig.scss, componentConfig);
@@ -38,7 +37,7 @@ export class Styles {
    *
    * @return {string}
    */
-  public writeSassComments(key: string, item: any) {
+  writeSassComments(key, item) {
     const comments = ['//', `// ${item.label || key}`, '//'];
 
     if (item.hasOwnProperty('description') && item.description) {
@@ -54,7 +53,7 @@ export class Styles {
    *
    * @return {string}
    */
-  public variablesToSass(variables: any, options: any = {}, level: number = 0) {
+  variablesToSass(variables, options = {}, level = 0) {
     const isArray = Array.isArray(variables);
     options = merge(options, {prefix: '$', indent: '  '});
     const indent = options.indent.repeat(level);
@@ -76,7 +75,7 @@ export class Styles {
    *
    * @return {string}
    */
-  public writeVariables(item: any, title = '', level = 0) {
+  writeVariables(item, title = '', level = 0) {
     let content = os.EOL + title;
 
     if (typeof item === "object" && item.hasOwnProperty('variables') && typeof item.variables === "object") {
@@ -101,7 +100,7 @@ export class Styles {
    *
    * @return {Promise<void>}
    */
-  public async createVariablesFromTheme(rootPath: string, config: ConfigurationDefinition.Scss) {
+  async createVariablesFromTheme(rootPath, config) {
     const sassFile = await getThemeSassDefinitionFile(rootPath);
     const destinationDir = path.resolve(rootPath, config.variablesPath);
 
@@ -116,8 +115,8 @@ export class Styles {
 
       const indexFile = await fs.createWriteStream(path.resolve(destinationDir, '_index.scss'));
       // @todo: create interface for parsed
-      const parsed: object = YAML.parse(fs.readFileSync(sassFile, 'utf8'), {merge: true});
-      let itemRootType: string[] = [];
+      const parsed = YAML.parse(fs.readFileSync(sassFile, 'utf8'), {merge: true});
+      let itemRootType = [];
 
       for (const [name, item] of Object.entries(parsed)) {
         if (typeof item === "object" && item.hasOwnProperty('types')) {
@@ -132,7 +131,7 @@ export class Styles {
           }
 
           if (item.hasOwnProperty('dependencies') && Array.isArray(item.dependencies)) {
-            item.dependencies.forEach((dependency: string) => {
+            item.dependencies.forEach((dependency) => {
               file.write(`@use "${dependency}";` + os.EOL);
             });
           }
@@ -161,7 +160,7 @@ export class Styles {
    *
    * @returns {Promise}
    */
-  public async compile(rootPath: string, config: ConfigurationDefinition.Scss, fullConfig: ConfigurationDefinition.Partial) {
+  async compile(rootPath, config, fullConfig) {
     if (config.enabled) {
       if (config.variablesPath) {
         const indexFilePath = path.resolve(rootPath, config.variablesPath, '../_index.scss');
@@ -224,7 +223,7 @@ export class Styles {
    *
    * @returns {Promise<void>}
    */
-  public async clean(rootPath: string, config: ConfigurationDefinition.Scss) {
+  async clean(rootPath, config) {
     const pattern = '/**/*.{css,css.map}';
 
     // If config.dest is null then the destination path is that of the source.

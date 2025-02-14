@@ -1,9 +1,9 @@
 const path = require("path");
 const { glob } = require("glob");
 
-let infoFile: string;
+let infoFile;
 
-function getThemeInfoFile(rootPath: string) {
+function getThemeInfoFile(rootPath) {
   if (typeof infoFile === "undefined") {
     [infoFile = null] = glob.sync(rootPath + "/*.info.yml");
   }
@@ -11,7 +11,7 @@ function getThemeInfoFile(rootPath: string) {
   return Promise.resolve(infoFile);
 }
 
-async function getModuleOrThemeName(rootPath: string) {
+async function getModuleOrThemeName(rootPath) {
   infoFile = await getThemeInfoFile(rootPath);
   if (infoFile) {
     const matches = path.basename(infoFile).match(/^(.+)\.info\.yml$/);
@@ -23,7 +23,7 @@ async function getModuleOrThemeName(rootPath: string) {
   }
 }
 
-async function getThemeSassDefinitionFile(rootPath: string) {
+async function getThemeSassDefinitionFile(rootPath) {
   const name = await getModuleOrThemeName(rootPath);
 
   if (name) {

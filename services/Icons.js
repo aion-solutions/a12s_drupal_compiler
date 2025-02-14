@@ -7,23 +7,22 @@ const del = require("del");
 const fs = require("fs");
 const Configuration = require("./Configuration");
 const { PathLike } = require("fs");
-const { Configuration: ConfigurationDefinition } = require("../types");
 const { Stream } = require("stream");
 
 
-export class Icons {
+class Icons {
 
-  readonly runTimestamp = Math.round(Date.now() / 1000);
+  runTimestamp = Math.round(Date.now() / 1000);
 
   /**
    * Gulp task; generate icon font.
    *
    * @return {Promise}
    */
-  public async generate(): Promise<any> {
+  async generate() {
     const config = await Configuration.get();
 
-    await config.loopOverComponents(async (name: string, { icons, componentPath }: ConfigurationDefinition.Partial) => {
+    await config.loopOverComponents(async (name, { icons, componentPath }) => {
       if (icons !== undefined && icons.enabled) {
         const iconName = icons.iconName || 'icons';
         await this.clean(componentPath, iconName, icons);
@@ -37,7 +36,7 @@ export class Icons {
    *
    * @return {Promise}
    */
-  public async create(rootPath: string, iconName: string, config: ConfigurationDefinition.Icons): Promise<any> {
+  async create(rootPath, iconName, config) {
     if (config.enabled && config.src) {
       const src = path.resolve(rootPath, config.src);
 
@@ -79,11 +78,11 @@ export class Icons {
     return;
   }
 
-  protected async writeGlyphs(stream: Stream, srcFile: string, destDir: string, settings: any) {
+  async writeGlyphs(stream, srcFile, destDir, settings) {
     return new Promise((resolve, reject) => {
-      stream.on('glyphs', (glyphs: any) => {
+      stream.on('glyphs', (glyphs) => {
         const iconData = _.merge({}, settings, {
-          glyphs: glyphs.map((glyph: any) => ({
+          glyphs: glyphs.map((glyph) => ({
             name: glyph.name,
             content: glyph.unicode[0].toString(16).toUpperCase(),
           })),
@@ -110,14 +109,14 @@ export class Icons {
    *
    * @return {Promise}
    */
-  public async clean(rootPath: string, iconName: string, config: ConfigurationDefinition.Icons): Promise<any> {
+  async clean(rootPath, iconName, config) {
     const dest = path.resolve(rootPath, config.dest);
     const toClean = [path.join(dest, `${iconName}.*`)];
 
     if (config.templates.enabled) {
       const srcFile = config.templates.css.src;
       const destDir = path.resolve(rootPath, config.templates.css.dest);
-      const cssTemplateFilename: PathLike = _.last(srcFile.split('/'));
+      const cssTemplateFilename = _.last(srcFile.split('/'));
 
       if (fs.existsSync(cssTemplateFilename)) {
         toClean.push(`${destDir}${cssTemplateFilename}`);
