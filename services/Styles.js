@@ -13,7 +13,7 @@ const del = require("del");
 const os = require("os");
 const fs = require("fs");
 
-class Styles {
+module.exports = class Styles {
 
   /**
    * Gulp task; generate the styles.

@@ -32,4 +32,8 @@ async function getThemeSassDefinitionFile(rootPath) {
   }
 }
 
-export { getThemeInfoFile as default, getModuleOrThemeName, getThemeSassDefinitionFile };
+module.exports = {
+  getThemeInfoFile,
+  getModuleOrThemeName,
+  getThemeSassDefinitionFile,
+};

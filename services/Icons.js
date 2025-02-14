@@ -10,7 +10,7 @@ const { PathLike } = require("fs");
 const { Stream } = require("stream");
 
 
-class Icons {
+module.exports = class Icons {
 
   runTimestamp = Math.round(Date.now() / 1000);
 
