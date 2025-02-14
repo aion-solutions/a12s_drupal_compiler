@@ -1,16 +1,15 @@
-// @ts-ignore
-import * as iconfont from "gulp-iconfont";
-import * as gulp from "gulp";
-import * as path from "path";
-import * as _ from "lodash";
-// @ts-ignore
-import * as ejs from "ejs";
-import * as del from 'del';
-import * as fs from "fs";
-import Configuration from "./Configuration";
-import {PathLike} from "fs";
-import {Configuration as ConfigurationDefinition} from "../types";
-import { Stream } from 'stream';
+const iconfont = require("gulp-iconfont");
+const gulp = require("gulp");
+const path = require("path");
+const _ = require("lodash");
+const ejs = require("ejs");
+const del = require("del");
+const fs = require("fs");
+const Configuration = require("./Configuration");
+const { PathLike } = require("fs");
+const { Configuration: ConfigurationDefinition } = require("../types");
+const { Stream } = require("stream");
+
 
 export class Icons {
 

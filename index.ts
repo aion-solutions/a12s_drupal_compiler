@@ -1,8 +1,8 @@
-import Configuration from "./services/Configuration";
-import {Styles} from "./services/Styles";
-import {Icons} from "./services/Icons";
-import * as gulp from "gulp";
-import {Command} from "commander";
+const Configuration = require("./services/Configuration");
+const Styles = require("./services/Styles");
+const Icons = require("./services/Icons");
+const gulp = require("gulp");
+const { Command } = require("commander");
 
 const icons = new Icons();
 const styles = new Styles();

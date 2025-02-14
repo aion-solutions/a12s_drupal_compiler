@@ -1,23 +1,18 @@
-import {Configuration as ConfigurationDefinition} from "../types";
-import {getThemeSassDefinitionFile} from "./drupalTheme";
-// @ts-ignore
-import * as sourcemaps from "gulp-sourcemaps";
-import Configuration from "./Configuration";
-// @ts-ignore
-import * as prefix from "gulp-autoprefixer";
-// @ts-ignore
-import * as sassGlob from "gulp-sass-glob";
-// @ts-ignore
-import * as sass from "gulp-dart-sass";
-import {merge} from "lodash";
-// @ts-ignore
-import * as ejs from "ejs";
-import * as path from "path";
-import * as YAML from "yaml";
-import * as gulp from "gulp";
-import * as del from "del";
-import * as os from "os";
-import * as fs from "fs";
+const { Configuration: ConfigurationDefinition } = require("../types");
+const { getThemeSassDefinitionFile } = require("./drupalTheme");
+const sourcemaps = require("gulp-sourcemaps");
+const Configuration = require("./Configuration");
+const prefix = require("gulp-autoprefixer");
+const sassGlob = require("gulp-sass-glob");
+const sass = require("gulp-dart-sass");
+const { merge } = require("lodash");
+const ejs = require("ejs");
+const path = require("path");
+const YAML = require("yaml");
+const gulp = require("gulp");
+const del = require("del");
+const os = require("os");
+const fs = require("fs");
 
 export class Styles {
 

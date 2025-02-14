@@ -1,5 +1,5 @@
-import {glob} from "glob";
-import * as path from "path";
+const path = require("path");
+const { glob } = require("glob");
 
 let infoFile: string;
 

@@ -1,9 +1,8 @@
-import {Configuration as ConfigurationDefinition} from "../types";
-import {merge} from "lodash";
-import * as path from "path";
-import {glob} from "glob";
-import * as fs from "fs";
-import {program} from "../index";
+const { Configuration: ConfigurationDefinition } = require("../types");
+const { merge } = require("lodash");
+const path = require("path");
+const { glob } = require("glob");
+const fs = require("fs");
 
 export default class Configuration {
 
