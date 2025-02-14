@@ -11,6 +11,7 @@
   "keywords": [
     "drupal"
   ],
+  "bin": "bin/compile.js",
   "scripts": {
     "help": "gulp --gulpfile --types css js index.ts help",
     "configuration": "gulp --gulpfile index.ts parse-configuration",
