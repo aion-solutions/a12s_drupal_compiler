@@ -2,12 +2,10 @@ const { merge } = require("lodash");
 const path = require("path");
 const { glob } = require("glob");
 const fs = require("fs");
+const {program} = require("../index");
+const YAML = require("yaml");
 
 class Configuration {
-
-  GLOB_PATTERN = "/**/**/drupalCompiler.config.json";
-
-  GLOB_PARSE_IGNORE = ["**/node_modules/**", "**/vendor/**"];
 
   static instance;
 
@@ -27,44 +25,28 @@ class Configuration {
   async parseConfiguration() {
     // Define the default configuration.
     const config = {
-      default: require("../config.default"),
+      default: require("../config.default.yml"),
       components: new Map(),
     };
 
-    const customConfigFile = path.resolve(config.default.drupalRoot, 'drupalCompiler.build.ts');
+    const customConfigFile = path.resolve(config.default.drupalRoot, program.getOptionValue('config-file'));
 
     return new Promise((resolve) => {
-      fs.open(customConfigFile, 'r', (error) => {
-        if (!error) {
-          const customConfig = require(customConfigFile);
-          merge(config.default, customConfig);
-        }
+      try {
+        const contentFile = YAML.parse(fs.readFileSync(customConfigFile).toString('utf8'));
 
-        try {
-          // Explore the different paths.
-          config.default.paths.forEach(p => {
-            glob.sync(path.resolve(config.default.drupalRoot, p) + this.GLOB_PATTERN, { ignore: this.GLOB_PARSE_IGNORE }).map(file => {
-              const contentFile = JSON.parse(fs.readFileSync(file).toString('utf8'));
-              contentFile.componentPath = path.dirname(file);
-              config.components.set(path.basename(contentFile.componentPath), contentFile);
-            });
-          });
+        if (!contentFile) {
+          merge(config.default, contentFile);
         }
-        catch (err) {
-          console.error(err);
-        }
+      }
+      catch (err) {
+        console.error(err);
+      }
 
-        this.configuration = config;
-        resolve(config);
-      });
+      console.log(config, 'config');
+      this.configuration = config;
+      resolve(config);
     });
-  }
-
-  async loopOverComponents(callback) {
-    for (let [name, componentConfig] of this.configuration.components) {
-      const config = merge({}, this.configuration.default, componentConfig);
-      await callback(name, config);
-    }
   }
 }
 

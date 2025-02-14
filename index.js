@@ -10,7 +10,8 @@ const styles = new Styles();
 const program = new Command();
 program
   .allowUnknownOption()
-  .option("-t, --types [TYPES...]", "The tasks to process, for example 'css', 'icons'", ['css', 'icons']);
+    .option("-t, --types [TYPES...]", "The tasks to process, for example 'css', 'icons'", ['css', 'icons'])
+    .option("-c, --config-file [PATH]", "Allows you to define the configuration file to use. By default, a file named `./a12s-drupal-compiler.yml` is used.", './a12s-drupal-compiler.yml');
 program.parse();
 
 gulp.task('parse-configuration', Configuration.get);
@@ -18,8 +19,8 @@ gulp.task('icons-generate', icons.generate.bind(icons));
 gulp.task('styles-generate', styles.generate.bind(styles));
 
 const types = program.getOptionValue("types");
-const buildSeriesArgs = ['parse-configuration'];
-const buildParallelArgs = [];
+let buildSeriesArgs = ['parse-configuration'];
+let buildParallelArgs = [];
 
 if (types.includes('icons')) {
   buildSeriesArgs.push('icons-generate');
