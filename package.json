@@ -1,9 +1,9 @@
 {
-  "name": "builder",
+  "name": "a12s-drupal-compiler",
   "version": "1.0.0",
-  "description": "System of compilation for js, ts, css, scss and icons.",
+  "description": "System of compilation for css, scss and icons.",
   "license": "UNLICENSED",
-  "main": "build/index.js",
+  "main": "build/index.ts",
   "author": {
     "name": "Aïon Solutions",
     "url": "https://www.aion-solutions.lu"
@@ -15,7 +15,6 @@
     "help": "gulp --gulpfile --types css js index.ts help",
     "configuration": "gulp --gulpfile index.ts parse-configuration",
     "build": "NODE_ENV=production gulp --gulpfile index.ts build",
-    "watch": "NODE_ENV=production gulp --gulpfile index.ts watch-files",
     "build-dev": "gulp --gulpfile index.ts build",
     "build-css-dev": "gulp --gulpfile build css",
     "build-css-icons-dev": "gulp --gulpfile build cssIcons"
