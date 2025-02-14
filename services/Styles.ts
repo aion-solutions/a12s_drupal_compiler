@@ -174,22 +174,7 @@ export class Styles {
         let content = fs.readFileSync('./templates/_index.scss.ejs', 'utf8');
         const indexContext = {
           iconsEnabled: fullConfig.icons?.enabled || false,
-          baseThemeVariablesPath: '',
         };
-
-        // @todo Support base theme.
-//        if (config.baseTheme) {
-//          const baseThemeVariablesPath = config.baseThemeVariablesPath || config.variablesPath;
-//          const baseThemeVariablesFile = path.resolve(rootPath, config.baseTheme, baseThemeVariablesPath, '../_index.scss');
-//
-//          try {
-//            fs.accessSync(baseThemeVariablesFile, fs.constants.R_OK);
-//            indexContext.baseThemeVariablesPath = path.relative(path.resolve(indexFilePath, '..'), path.resolve(baseThemeVariablesFile, '..'));
-//          }
-//          catch (err) {
-//            console.error(`The base theme file ${baseThemeVariablesFile} cannot be found.`);
-//          }
-//        }
 
         indexFile.write(ejs.render(content, indexContext));
         indexFile.end();

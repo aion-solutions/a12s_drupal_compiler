@@ -44,9 +44,6 @@ export default class Configuration {
           merge(config.default, customConfig);
         }
 
-        // Get the value of "paths" option.
-        config.default.paths = (program.getOptionValue('paths') || config.default.paths || []).map((path: string) => path.trim());
-
         try {
           // Explore the different paths.
           config.default.paths.forEach(p => {
