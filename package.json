@@ -12,7 +12,7 @@
   "keywords": [
     "drupal"
   ],
-  "bin": "bin/compile.cjs",
+  "bin": "bin/compile.ts",
   "scripts": {
     "help": "gulp --gulpfile --types css js index.ts help",
     "configuration": "gulp --gulpfile index.ts parse-configuration",
