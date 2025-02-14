@@ -18,7 +18,7 @@ gulp.task('icons-generate', icons.generate.bind(icons));
 gulp.task('styles-generate', styles.generate.bind(styles));
 
 const types = program.getOptionValue("types");
-const buildSeriesArgs: any[] = ['parse-configuration'];
+const buildSeriesArgs = ['parse-configuration'];
 const buildParallelArgs = [];
 
 if (types.includes('icons')) {

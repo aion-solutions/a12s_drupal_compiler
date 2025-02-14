@@ -4,7 +4,7 @@
   "description": "System of compilation for css, scss and icons.",
   "license": "UNLICENSED",
   "main": "build/index.ts",
-  "type": "commonjs",
+  "type": "module",
   "author": {
     "name": "Aïon Solutions",
     "url": "https://www.aion-solutions.lu"
