@@ -1,0 +1,11 @@
+@use "../variables/options";
+
+$border-radius: .25rem !default;
+
+@function border-radius($radius: var(--border-radius, $border-radius)) {
+  @if options.$enable-rounded {
+    @return $radius;
+  }
+
+  @return null;
+}

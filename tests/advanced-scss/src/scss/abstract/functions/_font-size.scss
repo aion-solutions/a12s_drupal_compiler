@@ -1,0 +1,6 @@
+@use "sass:math";
+@use "../../abstract/variables/theme/root";
+
+@function px-to-rem($size: 16px) {
+  @return (math.div($size, root.$html-font-size))+rem;
+}

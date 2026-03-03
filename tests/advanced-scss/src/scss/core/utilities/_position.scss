@@ -1,0 +1,17 @@
+@use 'sass:math';
+
+$positions: static, relative, absolute, fixed, sticky !default;
+
+@each $position in $positions {
+  .position-#{$position} {
+    position: $position;
+  }
+}
+
+@each $edge in (top, right, bottom, left) {
+  @each $value in (0, 50, 100) {
+    .#{$edge}-#{$value} {
+      #{$edge}: percentage(math.div($value, 100));
+    };
+  }
+}

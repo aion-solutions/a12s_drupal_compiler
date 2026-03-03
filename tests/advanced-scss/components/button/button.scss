@@ -1,0 +1,61 @@
+$background-color: #0d6efd !default;
+$background-color-hover: #0ba5ff !default;
+$border: none !default;
+$border-radius: .225rem !default;
+$btn-disabled-bg: #8dc5e3;
+$color: #ffffff !default;
+$cursor: pointer !default;
+$font-size: .65rem !default;
+$font-weight: normal !default;
+$padding-x: .6rem !default;
+$padding-y: .5rem !default;
+$text-align: center !default;
+
+.btn {
+  border: var(--btn-border, $border);
+  border-radius: var(--btn-border-radius, $border-radius);
+  cursor: var(--btn-cursor, $cursor);
+  display: inline-block;
+  font-family: var(--btn-font-family, var(--font-family-base, sans-serif));
+  font-size: var(--btn-font-size, $font-size);
+  font-weight: var(--btn-font-weight, $font-weight);
+  line-height: var(--btn-line-height);
+  padding: var(--btn-padding-y, $padding-y) var(--btn-padding-y, $padding-x);
+  text-align: $text-align;
+  text-decoration: none;
+  user-select: none;
+  vertical-align: middle;
+
+  &:hover {
+    color: initial;
+  }
+
+  &:disabled {
+    color: initial;
+    pointer-events: none;
+  }
+}
+
+.btn--default, .btn--primary {
+  background-color: $background-color;
+  color: $color;
+
+  &:hover {
+    background-color: $background-color-hover;
+  }
+
+  &:disabled {
+    background-color: var(--btn-disabled-bg, $btn-disabled-bg);
+  }
+}
+
+.btn--outlined {
+  background-color: transparent;
+  border: 1px solid $background-color;
+  color: $background-color;
+
+  &:hover {
+    background-color: $background-color;
+    color: $color;
+  }
+}

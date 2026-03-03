@@ -1,0 +1,41 @@
+{
+  "name": "a12s-compiler",
+  "version": "2.0.0",
+  "description": "System of compilation for scss and icons.",
+  "license": "MIT",
+  "author": {
+    "name": "Aïon Solutions",
+    "url": "https://www.aion-solutions.lu"
+  },
+  "keywords": [
+    "sass",
+    "css",
+    "font icons"
+  ],
+  "scripts": {
+    "gulp": "NODE_ENV=production gulp",
+    "gulp-dev": "gulp",
+    "configuration": "gulp init-configuration",
+    "build": "NODE_ENV=production gulp build",
+    "build-css": "NODE_ENV=production gulp build -t css",
+    "build-svg-sprite": "NODE_ENV=production gulp build -t svg-sprite",
+    "build-dev": "gulp build",
+    "build-css-dev": "gulp build -t css"
+  },
+  "dependencies": {
+    "@types/gulp": "^4.0",
+    "commander": "^14.0",
+    "css-loader": "^7.1",
+    "del": "^8.0",
+    "ejs": "^4.0",
+    "gulp": "^5.0",
+    "gulp-autoprefixer": "^10.0",
+    "gulp-dart-sass": "^1.1",
+    "gulp-sass-glob": "^1.1",
+    "gulp-sourcemaps": "^3.0",
+    "gulp-svg-sprite": "^2.0",
+    "sass": "^1.97",
+    "style-loader": "^4.0",
+    "yaml": "^2.8"
+  }
+}

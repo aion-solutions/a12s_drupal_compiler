@@ -1,0 +1,18 @@
+{
+  "name": "aion-solutions/a12s_drupal_compiler",
+  "type": "composer-plugin",
+  "description": "Helper for compiling SASS files and generate font icons.",
+  "require": {
+    "composer-plugin-api": "^2.0"
+  },
+  "require-dev": {
+    "composer/composer": "^2.0"
+  },
+  "extra": {
+    "class": "A12s\\DrupalCompiler\\Plugin",
+    "plugin-optional": true
+  },
+  "autoload": {
+    "psr-4": { "A12s\\DrupalCompiler\\": "src" }
+  }
+}

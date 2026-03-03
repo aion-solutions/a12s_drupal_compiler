@@ -1,0 +1,21 @@
+#
+# SASS configuration.
+#
+scss:
+  enabled: true
+  dirs:
+    - "components"
+    - source: "src/scss"
+      dest: "assets/css"
+      variables:
+        definitionFile: ../../variables.sass.yml
+        targetDir: abstract/variables/theme
+  autoPrefixerBrowsers:
+    - "last 2 versions"
+  includePaths: []
+
+#
+# SVG Sprite configuration
+#
+svgSprite:
+  enabled: true

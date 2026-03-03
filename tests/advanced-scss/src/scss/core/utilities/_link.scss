@@ -1,0 +1,12 @@
+@use "../../abstract/mixins";
+
+$color: black !default;
+$color-hover: gray !default;
+
+a {
+  color: $color;
+
+  &:hover {
+   color: $color-hover;
+  }
+}

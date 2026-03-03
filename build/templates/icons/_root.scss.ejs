@@ -1,0 +1,16 @@
+$relative-path: "<%= spriteRelativePath %>" !default;
+
+:root {
+  --<%= prefix %>-size: 16px;
+  --<%= prefix %>-size-large: 24px;
+  --<%= prefix %>-size-xlarge: 48px;
+<% if (useRootVariables) { -%>
+<% icons.forEach(function(icon, id) { -%>
+  --<%= prefix %>-<%= id %>-url: url(#{$relative-path + '<%= spriteFileName %>#<%= id %>'});
+<% if (defineDimensionsInRootVariables) { -%>
+  --<%= prefix %>-<%= id %>-height: <%= icon.height %>px;
+  --<%= prefix %>-<%= id %>-width: <%= icon.width %>px;
+<% } -%>
+<% }); -%>
+<% } -%>
+}

@@ -1,0 +1,11 @@
+.page-4xx {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+
+  .main-content {
+    text-align: center;
+    margin-bottom: var(--spacer-3);
+  }
+}

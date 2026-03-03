@@ -1,0 +1,131 @@
+@use "sass:map";
+@use "../../abstract/mixins";
+
+$enable-flex-fill: false !default;
+$enable-flex-reverse: false !default;
+
+$breakpoints: mixins.get-breakpoint-keys() !default;
+
+$align-items-options: flex-start, flex-end, center, stretch !default;
+$justify-items-options: () !default;
+$align-content-options: () !default;
+$justify-content-options: flex-start, flex-end, center, space-between !default;
+$align-self-options: flex-start, flex-end, center, stretch, auto !default;
+$justify-self-options: () !default;
+
+$align-items-list: start, end, flex-start, flex-end, center, stretch, baseline;
+$justify-items-list: start, end, flex-start, flex-end, left, right, center, stretch, baseline;
+$align-content-list: start, end, flex-start, flex-end, center, space-between, space-around, space-evenly, stretch, baseline;
+$justify-content-list: start, end, flex-start, flex-end, left, right, center, space-between, space-around, space-evenly, stretch;
+$align-self-list: start, end, flex-start, flex-end, self-start, self-end, center, stretch, baseline, auto;
+$justify-self-list: start, end, flex-start, flex-end, left, right, center, stretch, baseline, auto;
+
+// Flex variation
+//
+// Custom styles for additional flex alignment options.
+
+@each $breakpoint in $breakpoints {
+  @include mixins.media-breakpoint-up($breakpoint) {
+    $infix: mixins.breakpoint-infix($breakpoint);
+
+    .flex#{$infix}-row {
+      flex-direction: row !important;
+    }
+
+    .flex#{$infix}-column {
+      flex-direction: column !important;
+    }
+
+    @if $enable-flex-reverse {
+      .flex#{$infix}-row-reverse {
+        flex-direction: row-reverse !important;
+      }
+
+      .flex#{$infix}-column-reverse {
+        flex-direction: column-reverse !important;
+      }
+    }
+
+    .flex#{$infix}-wrap {
+      flex-wrap: wrap !important;
+    }
+
+    .flex#{$infix}-nowrap {
+      flex-wrap: nowrap !important;
+    }
+
+    .flex#{$infix}-wrap-reverse {
+      flex-wrap: wrap-reverse !important;
+    }
+
+    @if $enable-flex-fill {
+      .flex#{$infix}-fill {
+        flex: 1 1 auto !important;
+      }
+    }
+
+    .flex#{$infix}-grow-0 {
+      flex-grow: 0 !important;
+    }
+
+    .flex#{$infix}-grow-1 {
+      flex-grow: 1 !important;
+    }
+
+    .flex#{$infix}-shrink-0 {
+      flex-shrink: 0 !important;
+    }
+
+    .flex#{$infix}-shrink-1 {
+      flex-shrink: 1 !important;
+    }
+
+    @each $align-option in $align-items-options {
+      @if false != index($align-items-list, $align-option) {
+        .align-items#{$infix}-#{$align-option} {
+          align-items: $align-option !important;
+        }
+      }
+    }
+
+    @each $justify-option in $justify-items-options {
+      @if false != index($justify-items-list, $justify-option) {
+        .justify-items#{$infix}-#{$justify-option} {
+          justify-items: $justify-option !important;
+        }
+      }
+    }
+
+    @each $align-option in $align-content-options {
+      @if false != index($align-content-list, $align-option) {
+        .align-content#{$infix}-#{$align-option} {
+          align-content: $align-option !important;
+        }
+      }
+    }
+
+    @each $justify-option in $justify-content-options {
+      @if false != index($justify-content-list, $justify-option) {
+        .justify-content#{$infix}-#{$justify-option} {
+          justify-content: $justify-option !important;
+        }
+      }
+    }
+
+    @each $align-option in $align-self-options {
+      @if false != index($align-self-list, $align-option) {
+        .align-self#{$infix}-#{$align-option} {
+          align-self: $align-option !important;
+        }
+      }
+    }
+
+    @each $justify-option in $justify-self-options {
+      @if false != index($justify-self-list, $justify-option) {
+        .justify-self#{$infix}-#{$justify-option} {
+          justify-self: $justify-option !important;
+        }
+      }
+    }
+  }
+}

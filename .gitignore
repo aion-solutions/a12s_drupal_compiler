@@ -1,3 +1,10 @@
-/node_modules
+/build/node_modules/
+/build/yarn.lock
+
+/tests/advanced-scss/assets/
+/tests/advanced-scss/components/
+/tests/advanced-scss/src/scss/
+/tests/simple-scss/
 
 .idea/
+.DS_Store

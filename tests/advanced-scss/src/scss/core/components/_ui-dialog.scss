@@ -1,0 +1,151 @@
+@use "../../abstract/mixins";
+
+.ui-dialog {
+  background-color: rgba(255, 255, 255, .85);
+  border: 0 none;
+  box-shadow: rgba(0, 0, 0, .35) 0 .625rem 1.25rem;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 20vh;
+  max-height: 80vh;
+  max-width: 80vw;
+  min-width: 50vw;
+  overflow: auto;
+  width: auto !important;
+
+  &:before {
+    backdrop-filter: blur(5px);
+    border-radius: 5px;
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: opacity .3s ease-in-out;
+    z-index: -1;
+  }
+
+  .ui-dialog-titlebar {
+    background: transparent;
+    border: 0;
+    margin-bottom: .5rem;
+    padding: 1.2rem 1rem .25rem;
+
+    @include mixins.media-breakpoint-up(lg) {
+      padding: 1.2rem 1.5rem .25rem;
+    }
+
+    .ui-dialog-title {
+      color: var(--headings-color);
+      font-family: var(--headings-font-family);
+      font-size: 1rem;
+      font-weight: var(--headings-font-weight);
+      line-height: var(--h4-line-height);
+      margin-bottom: var(--headings-margin-bottom);
+      overflow: unset;
+      padding-right: 2rem;
+      text-align: center;
+      white-space: unset;
+      width: 100%;
+
+      @include mixins.media-breakpoint-up(lg) {
+        font-size: var(--h4-font-size);
+      }
+    }
+
+    .ui-dialog-titlebar-close {
+      background: transparent;
+      border: 0;
+      right: .3rem;
+      top: 1.6rem;
+      transform: translateY(-50%);
+
+      @include mixins.media-breakpoint-up(lg) {
+        right: 1rem;
+        top: 50%;
+      }
+
+      .ui-button-icon {
+        background: unset;
+        overflow: unset;
+        text-indent: 0;
+      }
+    }
+  }
+
+  #drupal-modal.ui-dialog-content {
+    padding: .8rem 1.5em 1.5rem;
+  }
+
+  .ui-dialog-buttonpane {
+    border: 0;
+
+    &:before {
+      border-bottom: 1px solid var(--primary);
+      width: 80%;
+    }
+
+    .ui-dialog-buttonset.form-actions {
+      float: unset;
+      text-align: center;
+
+      button {
+        background-color: transparent;
+        border: 1px solid var(--primary);
+        border-radius: var(--btn-border-radius);
+        color: var(--primary);
+        cursor: pointer;
+        font-size: var(--btn-font-size);
+        font-weight: var(--font-weight-base);
+        padding: var(--btn-padding);
+        text-transform: uppercase;
+        transition: .2s all ease-in-out;
+      }
+    }
+  }
+
+  .fieldgroup {
+    legend {
+      color: var(--headings-color);
+      font-family: var(--headings-font-family);
+      font-size: var(--h5-font-size);
+      font-weight: var(--headings-font-weight);
+      line-height: var(--h5-line-height);
+      margin-bottom: var(--headings-margin-bottom);
+    }
+  }
+
+  .ui-dialog-titlebar:after,
+  .ui-dialog-buttonpane:before {
+    border-bottom: 1px solid var(--gray);
+    content: '';
+    margin-bottom: .5rem;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+  }
+
+  [data-drupal-messages] {
+    text-align: center;
+
+    .btn-primary {
+      color: var(--white);
+
+      &:hover {
+        color: var(--primary);
+      }
+    }
+  }
+
+  form [data-drupal-messages] {
+      display: none;
+  }
+}
+
+.ui-widget {
+  font-family: var(--font-family-base), sans-serif;
+  font-size: var(--font-size-base);
+}

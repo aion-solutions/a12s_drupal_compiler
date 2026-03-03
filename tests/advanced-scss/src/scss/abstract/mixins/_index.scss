@@ -1,0 +1,20 @@
+@use "sass:meta";
+@use "../variables";
+
+@use "breakpoints" with (
+  $breakpoints: if(meta.global-variable-exists("breakpoints", 'variables'), variables.$breakpoints, null)
+);
+
+@use "link" with (
+  $color: if(meta.global-variable-exists("link-color", "variables"), variables.$link-color, null),
+  $color-hover: if(meta.global-variable-exists("link-color-hover", "variables"), variables.$link-color-hover, null),
+  $text-decoration-default: if(meta.global-variable-exists("link-text-decoration-default", "variables"), variables.$link-text-decoration-default, null),
+  $text-decoration-hover: if(meta.global-variable-exists("link-text-decoration-hover", "variables"), variables.$link-text-decoration-hover, null)
+);
+
+@forward "breakpoints";
+@forward "link";
+@forward "positioning";
+@forward "screen-reader";
+@forward "text-truncate";
+@forward "buttons";

@@ -1,0 +1,28 @@
+@use "sass:map";
+@use "../../abstract/mixins";
+
+$abbreviations: (width: w, height: h) !default;
+$breakpoints: mixins.get-breakpoint-keys() !default;
+$sizes: (
+  100: 100%,
+  auto: auto
+) !default;
+
+// Width and height
+
+@each $prop, $abbrev in $abbreviations {
+  @each $size, $length in $sizes {
+    @each $breakpoint in $breakpoints {
+      @if mixins.has-breakpoint($breakpoint) {
+        @include mixins.media-breakpoint-up($breakpoint) {
+          $infix: mixins.breakpoint-infix($breakpoint);
+          .#{$abbrev}#{$infix}-#{$size} { #{$prop}: $length; }
+        }
+      }
+    }
+  }
+}
+
+.w-fit-content {
+  width: fit-content;
+}

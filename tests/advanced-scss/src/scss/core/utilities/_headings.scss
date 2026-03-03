@@ -1,0 +1,41 @@
+@use "sass:list";
+@use "sass:map";
+@use "sass:meta";
+@use "sass:string";
+@use "../../abstract/variables/theme/headings";
+@use "../../abstract/functions/variables-helpers" as helpers;
+@use "../../abstract/mixins";
+
+
+$enable-heading-classes: true !default;
+$headings-max-level: 6 !default;
+
+$variables: meta.module-variables("headings") !default;
+$global-properties: helpers.gather-properties(map.keys($variables), "headings") !default;
+$all-headings: ();
+
+@for $i from 1 through $headings-max-level {
+  $all-headings: list.append($all-headings, h#{$i}, $separator: comma);
+
+  @if $enable-heading-classes {
+    $all-headings: list.append($all-headings, string.unquote(".h#{$i}"), $separator: comma);
+  }
+}
+
+@if list.length(map.keys($global-properties)) > 0 and list.length($all-headings) > 0 {
+  @include helpers.print-selectors($all-headings, $global-properties);
+}
+
+@for $i from 1 through $headings-max-level {
+  $properties: helpers.gather-properties(map.keys($variables), h#{$i});
+
+  @if list.length(map.keys($properties)) >= 1 {
+    $selectors: (h#{$i});
+
+    @if $enable-heading-classes {
+      $selectors: list.append($selectors, string.unquote(".h#{$i}"), $separator: comma);
+    }
+
+    @include helpers.print-selectors($selectors, $properties);
+  }
+}

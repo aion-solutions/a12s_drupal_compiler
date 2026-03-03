@@ -1,0 +1,296 @@
+breakpoints:
+  types: ['group']
+  label: 'Breakpoints'
+  variables:
+    breakpoints:
+      xs: 0
+      sm: 568px
+      md: 768px
+      lg: 992px
+      xl: 1256px
+      xxl: 1520px
+
+colors:
+  types: ['group']
+  label: 'Colors'
+  # Grayscale
+  grayscale:
+    types: ['variables']
+    label: 'Grayscale'
+    variables: &colors-grayscale
+      white: 'white'
+      gray-100: '#F4F4F4'
+      gray-300: '#DCDCDC'
+      gray-400: '#C1C1C1'
+      gray-500: '#A8ABAF'
+      gray-600: '#8E8E8E'
+      gray-800: '#15171a'
+      gray-900: '#282828'
+      black: 'black'
+  # Theme
+  theme:
+    types: ['variables']
+    label: 'Theme main colors'
+    variables: &colors-theme
+      primary: '#009ddf'
+      secondary: '#f15a24'
+      info: '#007bff'
+      error: '#dc3545'
+      warning: '#ffc107'
+      success: '#28a745'
+      light: $gray-100
+      gray: $gray-300
+      dark: $gray-800
+  # Variants
+  variants:
+    types: ['variables']
+    label: 'Variants'
+    description: 'Those colors are used to create variants for background, buttons...'
+    variables:
+      border-colors:
+        white: $white
+        dark: $dark
+        primary: $primary
+      background-colors:
+        transparent: transparent
+        white: $white
+        light: $light
+        gray: $gray
+        dark: $dark
+        black: $black
+        primary: $primary
+
+main:
+  types: ['group']
+  label: 'Main settings'
+  dependencies:
+    - sass:math
+    - colors
+  # Page
+  page:
+    types: ['variables']
+    label: 'Page settings'
+    variables:
+      container-max-widths:
+        '': 1650px
+        medium: 1380px
+        small: 960px
+        extra-small: 560px
+      grid-breakpoints: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl']
+      flex-breakpoints: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl']
+      spacing-breakpoints: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl']
+      spacers:
+        0: var(--spacer-0)
+        1: var(--spacer-1)
+        2: var(--spacer-2)
+        3: var(--spacer-3)
+        4: var(--spacer-4)
+        5: var(--spacer-5)
+      display-breakpoints: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl']
+      # Options
+      enable-rounded: true;
+      enable-pointer-cursor-for-buttons: true;
+      enable-borders: true;
+      enable-background-colors: true;
+      enable-transitions: true;
+      enable-prefers-reduced-motion-media-query: true;
+      enable-negative-margins: false;
+      enable-display-print: false;
+      enable-flex-fill: false;
+      enable-flex-reverse: false;
+  # Text
+  text:
+    types: ['variables']
+    label: 'Text'
+    variables:
+      text-align-breakpoints: ['xs', 'sm', 'md', 'lg']
+      text-colors:
+        white: white
+        black: black
+        body: var(--body-color)
+        muted: 'var(--text-muted, #808080)'
+        success: var(--success)
+        warning: var(--warning)
+        error: var(--error)
+  # Typography
+  typography:
+    # "root" type do nothing by itself there, it is just a tag indicating that the variables below are included in the
+    # root variables after. The purpose is to remind that we should define as least variables as possible here.
+    types: ['variables', 'root']
+    label: Typography
+    variables: &typography
+      html-font-size: 16px
+      font-family-base: "'Helvetica', sans-serif"
+      font-family-serif: "'Arial', serif"
+      font-variant-numeric: lining-nums
+      font-feature-settings: "lnum"
+      line-height-base: 1
+      font-weight-light: 300
+      font-weight-base: 400
+      font-weight-bold: 700
+      display-line-height: 1.5
+      body-bg: colors.$white
+      body-color: colors.$black
+
+  # Transitions
+  transitions:
+    types: ['variables']
+    label: "Transitions"
+    variables:
+      transition-duration-default: .3s
+      transition-base: all $transition-duration-default ease-in-out
+      transition-fade: "opacity #{math.div($transition-duration-default, 2)} linear"
+      transition-collapse: height $transition-duration-default ease
+      transition-collapse-width: width $transition-duration-default ease
+
+# Link
+link:
+  types: ['variables']
+  dependencies:
+    - colors
+  label: 'Link'
+  variables: &link
+    link-color: colors.$primary
+    link-decoration: none
+    link-transition: .3s all ease-in-out
+    link-color-hover: colors.$gray-800
+    link-hover-decoration: none
+
+buttons:
+  types: ['group']
+  label: 'Buttons'
+  dependencies:
+    - colors
+    - main
+  variants:
+    types: ['variables']
+    label: 'Button variants'
+    variables:
+      sizes: ['xs']
+      btn-colors:
+        black: colors.$white
+        white: colors.$black
+        primary: colors.$white
+        secondary: colors.$white
+      btn-bg-colors:
+        black: colors.$black
+        white: colors.$white
+        primary: colors.$primary
+        secondary: colors.$secondary
+      btn-border-colors:
+        black: colors.$white
+        white: colors.$black
+        primary: colors.$primary
+        secondary: colors.$secondary
+      btn-hover-colors:
+        black: colors.$black
+        white: colors.$white
+        primary: colors.$primary
+        secondary: colors.$secondary
+      btn-hover-bg-colors:
+        black: colors.$white
+        white: colors.$black
+        primary: colors.$white
+        secondary: colors.$white
+      btn-hover-border-colors:
+        black: colors.$black
+        white: colors.$white
+        primary: colors.$primary
+        secondary: colors.$secondary
+  settings:
+    types: ['variables', 'root']
+    variables: &button-settings
+      btn-border-radius: .313rem
+      btn-display: inline-block
+      btn-font-weight: main.$font-weight-base
+      btn-line-height: 120%
+      btn-letter-spacing: .8px
+      btn-text-transform: uppercase
+      btn-transition: .2s all ease-in-out
+      btn-font-size:
+        xs: .75rem
+        lg: 1rem
+      btn-padding:
+        xs: .65rem 1.375rem
+        lg: .938rem 1.875rem
+      btn-xs-font-size: .75rem
+      btn-xs-padding: .65rem 1.375rem
+      btn-xs-letter-spacing: .6px
+
+root:
+  types: ['root']
+  label: 'CSS root variables'
+  dependencies:
+    - colors
+    - main
+  variables:
+    <<: [*colors-grayscale, *colors-theme, *link, *typography, *button-settings]
+    # Menu
+    menu-link-color: colors.$primary
+    menu-link-font-size: .875rem
+    menu-link-line-height: 1.3
+    menu-link-padding-x: 1rem
+    menu-link-padding-y: .25rem
+    menu-link-transform: uppercase
+    # Heading
+    headings-max-level: 5
+    # Borders
+    border-width: .125rem
+    border-radius-sm: .2rem
+    border-radius: .3125rem
+    # Grid
+    grid-gap-default: 2.5rem
+    grid-gap:
+      xs: 1.25rem
+      xxl: 1.875rem
+    # Spacing
+    spacer-0: 0
+    spacer-1: .625rem
+    spacer-2: 1rem
+    spacer-3: 1.5rem
+    spacer-4: 2rem
+    spacer-5: 3rem
+    # Input
+    input-padding-x: 1.25rem
+    input-padding-y: .625rem
+    input-font-size: .75rem
+    # Drupal toolbar
+    toolbar-fixed-padding: 60px
+    toolbar-fixed-tray-open-padding: 100px
+
+root-font-sizes:
+  types: ['root']
+  label: 'Root font sizes'
+  variables:
+    font-size-base:
+      xs: .75rem
+      md: 1rem
+    font-size-sm: .875rem
+    font-size-lg:
+      xs: 1rem
+      md: 1.125rem
+    font-size-xl:
+      xs: 1.3rem
+      md: 1.6rem
+
+headings:
+  types: ['root']
+  label: 'Heading properties'
+  dependencies:
+    - main
+    - root
+  variables:
+    headings-color: main.$body-color
+    headings-font-family: root.$font-family-base
+    headings-margin-bottom:
+      xs: .625rem
+      lg: 1.25rem
+    headings-font-weight: 700
+    headings-text-transform: unset
+    headings-line-height: 1.4
+    h1-font-size: 2.5rem
+    h2-font-size: 2.125rem
+    h3-font-size: 1.8rem
+    h4-font-size: 1.6rem
+    h5-font-size: 1.3rem
+    h6-font-size: 1.2rem

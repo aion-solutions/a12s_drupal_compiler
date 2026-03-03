@@ -1,0 +1,66 @@
+html.js #block-a12s-basetheme-messages {
+  display: none;
+}
+
+html.js .ui-dialog #block-a12s-basetheme-messages {
+  display: block;
+  overflow-y: auto;
+}
+
+.drupal-message-dialog-toggle {
+  bottom: 15px;
+  left: 40px;
+  opacity: .9;
+  z-index: 1;
+
+  a {
+    cursor: pointer;
+    height: 35px;
+    text-decoration: none;
+    width: 35px;
+
+    i {
+      color: var(--white);
+      font-size: 1.1rem;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+
+      &:hover {
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+
+  .count-messages {
+    top: -10px;
+    left: 75%;
+    font-size: .75rem;
+
+    span {
+      padding: 0 .2rem;
+      z-index: 10;
+
+      &:before {
+        background-color: var(--error);
+        border-radius: var(--border-radius);
+        content: "";
+        height: 17px;
+        left: 50%;
+        min-width: 17px;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        z-index: -1;
+      }
+    }
+  }
+}
+
+[data-drupal-messages] {
+  ul {
+    list-style: none;
+    padding-left: 0;
+  }
+}

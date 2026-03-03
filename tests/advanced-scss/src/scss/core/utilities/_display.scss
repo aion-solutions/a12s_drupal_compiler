@@ -1,0 +1,36 @@
+@use "sass:map";
+@use "../../abstract/mixins";
+
+//
+// Utilities for common `display` values
+//
+
+$enable-print: false !default;
+$breakpoints: mixins.get-breakpoint-keys() !default;
+$properties: none, inline, inline-block, block, table, table-row, table-cell, flex, inline-flex !default;
+$prefix: "d" !default;
+
+@each $breakpoint in $breakpoints {
+  @if mixins.has-breakpoint($breakpoint) {
+    @include mixins.media-breakpoint-up($breakpoint) {
+      $infix: mixins.breakpoint-infix($breakpoint);
+
+      @each $value in $properties {
+        .#{$prefix}#{$infix}-#{$value} { display: $value !important; }
+      }
+    }
+  }
+}
+
+
+//
+// Utilities for toggling `display` in print
+//
+
+@if $enable-print {
+  @media print {
+    @each $value in $properties {
+      .d-print-#{$value} { display: $value !important; }
+    }
+  }
+}

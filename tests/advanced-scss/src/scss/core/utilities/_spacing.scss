@@ -1,0 +1,101 @@
+@use "sass:map";
+@use "../../abstract/mixins";
+@use "../../abstract/variables/options";
+
+$abbreviations: (
+  margin: m,
+  padding: p,
+) !default;
+
+$breakpoints: mixins.get-breakpoint-keys() !default;
+
+$spacers: (
+  0: 0,
+  1: .5rem,
+  2: 1rem,
+  3: 1.5rem,
+  4: 2.5rem,
+  5: 4rem,
+) !default;
+
+// Margin and Padding
+
+@each $breakpoint in $breakpoints {
+  @if mixins.has-breakpoint($breakpoint) {
+    @include mixins.media-breakpoint-up($breakpoint) {
+      $infix: mixins.breakpoint-infix($breakpoint);
+
+      @each $prop, $abbrev in $abbreviations {
+        @each $size, $length in $spacers {
+          .#{$abbrev}#{$infix}-#{$size} { #{$prop}: $length !important; }
+          .#{$abbrev}t#{$infix}-#{$size},
+          .#{$abbrev}y#{$infix}-#{$size} {
+            #{$prop}-top: $length !important;
+          }
+          .#{$abbrev}r#{$infix}-#{$size},
+          .#{$abbrev}x#{$infix}-#{$size} {
+            #{$prop}-right: $length !important;
+          }
+          .#{$abbrev}b#{$infix}-#{$size},
+          .#{$abbrev}y#{$infix}-#{$size} {
+            #{$prop}-bottom: $length !important;
+          }
+          .#{$abbrev}l#{$infix}-#{$size},
+          .#{$abbrev}x#{$infix}-#{$size} {
+            #{$prop}-left: $length !important;
+          }
+        }
+      }
+
+      @if map.has-key($abbreviations, "margin") {
+        $margin-abbreviation: map.get($abbreviations, "margin");
+
+        // Some special margin utils
+        .#{$margin-abbreviation}#{$infix}-auto { margin: auto !important; }
+        .#{$margin-abbreviation}t#{$infix}-auto,
+        .#{$margin-abbreviation}y#{$infix}-auto {
+          margin-top: auto !important;
+        }
+        .#{$margin-abbreviation}r#{$infix}-auto,
+        .#{$margin-abbreviation}x#{$infix}-auto {
+          margin-right: auto !important;
+        }
+        .#{$margin-abbreviation}b#{$infix}-auto,
+        .#{$margin-abbreviation}y#{$infix}-auto {
+          margin-bottom: auto !important;
+        }
+        .#{$margin-abbreviation}l#{$infix}-auto,
+        .#{$margin-abbreviation}x#{$infix}-auto {
+          margin-left: auto !important;
+        }
+
+        // Negative margins (e.g., where `.mb-n1` is negative version of `.mb-1`)
+        @if options.$enable-negative-margins {
+          @each $size, $length in $spacers {
+            @if "#{$size}" != "0" {
+              .#{$margin-abbreviation}#{$infix}-n#{$size} {
+                margin: -$length !important;
+              }
+              .#{$margin-abbreviation}t#{$infix}-n#{$size},
+              .#{$margin-abbreviation}y#{$infix}-n#{$size} {
+                margin-top: -$length !important;
+              }
+              .#{$margin-abbreviation}r#{$infix}-n#{$size},
+              .#{$margin-abbreviation}x#{$infix}-n#{$size} {
+                margin-right: -$length !important;
+              }
+              .#{$margin-abbreviation}b#{$infix}-n#{$size},
+              .#{$margin-abbreviation}y#{$infix}-n#{$size} {
+                margin-bottom: -$length !important;
+              }
+              .#{$margin-abbreviation}l#{$infix}-n#{$size},
+              .#{$margin-abbreviation}x#{$infix}-n#{$size} {
+                margin-left: -$length !important;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

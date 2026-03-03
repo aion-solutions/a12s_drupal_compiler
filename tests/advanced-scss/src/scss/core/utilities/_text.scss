@@ -1,0 +1,68 @@
+@use "../../abstract/mixins";
+
+$align-breakpoints: mixins.get-breakpoint-keys() !default;
+$text-colors: (
+  "white": white,
+  "black": black,
+  "body": var(--body-color, black),
+  "muted": var(--text-muted, #808080),
+) !default;
+
+//
+// Text
+//
+
+// Alignment
+
+.text-justify  { text-align: justify !important; }
+.text-wrap     { white-space: normal !important; }
+.text-nowrap   { white-space: nowrap !important; }
+.text-truncate { @include mixins.text-truncate(); }
+
+// Responsive alignment
+
+@each $breakpoint in $align-breakpoints {
+  @include mixins.media-breakpoint-up($breakpoint) {
+    $infix: mixins.breakpoint-infix($breakpoint);
+
+    .text#{$infix}-left   { text-align: left !important; }
+    .text#{$infix}-right  { text-align: right !important; }
+    .text#{$infix}-center { text-align: center !important; }
+  }
+}
+
+// Transformation
+
+.text-lowercase  { text-transform: lowercase !important; }
+.text-uppercase  { text-transform: uppercase !important; }
+.text-capitalize { text-transform: capitalize !important; }
+
+// Weight and italics
+
+.font-weight-light   { font-weight: var(--font-weight-light, 300) !important; }
+.font-weight-lighter { font-weight: var(--font-weight-lighter, lighter) !important; }
+.font-weight-normal  { font-weight: var(--font-weight-normal, 400) !important; }
+.font-weight-bold    { font-weight: var(--font-weight-bold, 700) !important; }
+.font-weight-bolder  { font-weight: var(--font-weight-bolder, bolder) !important; }
+.font-italic         { font-style: italic !important; }
+
+// Contextual colors
+
+@each $color, $value in $text-colors {
+  .text-#{$color} {
+    color: $value;
+  };
+}
+
+// Misc
+
+.text-decoration-none { text-decoration: none !important; }
+
+.text-break {
+  word-break: break-word !important; // Deprecated, but avoids issues with flex containers
+  word-wrap: break-word !important; // Used instead of `overflow-wrap` for IE & Edge Legacy
+}
+
+// Reset
+
+.text-reset { color: inherit !important; }

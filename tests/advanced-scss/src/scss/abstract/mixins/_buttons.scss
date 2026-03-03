@@ -1,0 +1,63 @@
+@use "../functions";
+
+// Button variants
+// Easily pump out default styles, as well as :hover, :focus, :active,
+// and disabled options for all buttons
+
+// scss-docs-start btn-variant-mixin
+//@mixin button-variant(
+//  $background,
+//  $border,
+//  $color: functions.contrast-color($background),
+//  $hover-background: if($color == $color-contrast-light ),
+//  $hover-border: if($color == $color-contrast-light ),
+//  $hover-color: functions.contrast-color($hover-background),
+//  $active-background: if($color == $color-contrast-light ),
+//  $active-border: if($color == $color-contrast-light ),
+//  $active-color: functions.contrast-color($active-background),
+//  $disabled-background: $background,
+//  $disabled-border: $border,
+//) {
+//  --btn-active-bg: #{$active-background};
+//  --btn-active-color: #{$active-color};
+//  --btn-bg: #{$background};
+//  --btn-color: #{$color};
+//  --btn-disabled-bg: #{$disabled-background};
+//  --btn-disabled-color: #{$disabled-color};
+//  --btn-hover-bg: #{$hover-background};
+//  --btn-hover-color: #{$hover-color};
+//}
+// scss-docs-end btn-variant-mixin
+
+
+// scss-docs-start btn-outline-variant-mixin
+//@mixin button-outline-variant(
+//  $color,
+//  $color-hover: functions.contrast-color($color),
+//  $active-background: $color,
+//  $active-color: functions.contrast-color($active-background)
+//) {
+//  --btn-active-bg: #{$active-background};
+//  --btn-active-color: #{$active-color};
+//  --btn-color: #{$color};
+//  --btn-disabled-bg: transparent;
+//  --btn-disabled-color: #{$color};
+//  --btn-hover-bg: #{$active-background};
+//  --btn-hover-color: #{$color-hover};
+//}
+// scss-docs-end btn-outline-variant-mixin
+
+
+
+// scss-docs-start btn-outline-variant-mixin
+@mixin button-outline-variant {
+  background-color: transparent;
+  border: 1px solid #000;
+  color: #000;
+
+  &:hover {
+    background-color: #000;
+    color: #fff;
+  }
+}
+// scss-docs-end btn-outline-variant-mixin

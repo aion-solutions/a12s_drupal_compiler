@@ -1,0 +1,100 @@
+@use "sass:meta";
+@use "../../abstract/variables";
+@use "../../abstract/variables/options";
+
+@use "align";
+
+@use "background-colors" with (
+  $colors: if(meta.global-variable-exists("background-colors", "variables"), variables.$background-colors, null),
+);
+
+@use "borders" with (
+  $colors: if(meta.global-variable-exists("border-colors", "variables"), variables.$border-colors, null),
+  $border-width: if(meta.global-variable-exists("border-width", "variables"), variables.$border-width, null),
+  $border-radius-sm: if(meta.global-variable-exists("border-radius-sm", "variables"), variables.$border-radius-sm, null),
+  $border-radius: if(meta.global-variable-exists("border-radius", "variables"), variables.$border-radius, null),
+);
+
+@use "buttons" with (
+  $button-colors: if(meta.global-variable-exists("btn-colors", "variables"), variables.$btn-colors, null),
+  $button-bg-colors: if(meta.global-variable-exists("btn-bg-colors", "variables"), variables.$btn-bg-colors, null),
+  $button-border-colors: if(meta.global-variable-exists("btn-border-colors", "variables"), variables.$btn-border-colors, null),
+  $button-hover-colors: if(meta.global-variable-exists("btn-hover-colors", "variables"), variables.$btn-hover-colors, null),
+  $button-hover-bg-colors: if(meta.global-variable-exists("btn-hover-bg-colors", "variables"), variables.$btn-hover-bg-colors, null),
+  $button-hover-border-colors: if(meta.global-variable-exists("btn-hover-border-colors", "variables"), variables.$btn-hover-border-colors, null),
+);
+
+@use "container" with (
+  $max-widths: if(meta.global-variable-exists("container-max-widths", "variables"), variables.$container-max-widths, null),
+);
+
+@use "display" with (
+  $enable-print: if(meta.global-variable-exists("enable-display-print", "variables"), options.$enable-display-print, null),
+  $properties: if(meta.global-variable-exists("display-properties", "variables"), variables.$display-properties, null),
+  $breakpoints: if(meta.global-variable-exists("display-breakpoints", "variables"), variables.$display-breakpoints, null),
+  $prefix: if(meta.global-variable-exists("display-prefix", "variables"), variables.$display-prefix, null),
+);
+
+@use "flex" with (
+  $enable-flex-fill: if(meta.global-variable-exists("enable-flex-fill", "variables"), options.$enable-flex-fill, null),
+  $enable-flex-reverse: if(meta.global-variable-exists("enable-flex-reverse", "variables"), options.$enable-flex-reverse, null),
+  $breakpoints: if(meta.global-variable-exists("flex-breakpoints", "variables"), variables.$flex-breakpoints, null),
+  $align-items-options: if(meta.global-variable-exists("align-items-options", "variables"), variables.$flex-align-items-options, null),
+  $justify-items-options: if(meta.global-variable-exists("justify-items-options", "variables"), variables.$flex-justify-items-options, null),
+  $align-content-options: if(meta.global-variable-exists("align-content-options", "variables"), variables.$flex-align-content-options, null),
+  $justify-content-options: if(meta.global-variable-exists("justify-content-options", "variables"), variables.$flex-justify-content-options, null),
+  $align-self-options: if(meta.global-variable-exists("align-self-options", "variables"), variables.$flex-align-self-options, null),
+  $justify-self-options: if(meta.global-variable-exists("justify-self-options", "variables"), variables.$flex-justify-self-options, null),
+);
+
+@use "grid" with (
+  $max-columns: if(meta.global-variable-exists("grid-max-columns", "variables"), variables.$grid-max-columns, null),
+  $breakpoints: if(meta.global-variable-exists("grid-breakpoints", "variables"), variables.$grid-breakpoints, null),
+  $gap-breakpoints: if(meta.global-variable-exists("grid-gap-breakpoints", "variables"), variables.$grid-gap-breakpoints, null),
+  $gap-default: if(meta.global-variable-exists("$grid-gap", "variables"), variables.$grid-gap, null),
+  $gap-values: if(meta.global-variable-exists("grid-gap-values", "variables"), variables.$grid-gap-values, null),
+  $properties: if(meta.global-variable-exists("grid-gap-properties", "variables"), variables.$grid-gap-properties, null),
+);
+
+@use "headings" with (
+  $enable-heading-classes: if(meta.global-variable-exists("enable-heading-classes", "variables"), options.$enable-heading-classes, null),
+  $headings-max-level: if(meta.global-variable-exists("headings-max-level", "variables"), variables.$headings-max-level, null),
+);
+
+@use "interactions" with (
+  $user-selects: if(meta.global-variable-exists("user-selects", "variables"), variables.$user-selects, null),
+);
+
+@use "link" with (
+  $color: if(meta.global-variable-exists("link-color", "variables"), variables.$link-color, null),
+  $color-hover: if(meta.global-variable-exists("link-color-hover", "variables"), variables.$link-color-hover, null)
+);
+
+@use "overflow" with (
+  $overflows: if(meta.global-variable-exists("overflows", "variables"), variables.$overflows, null),
+);
+
+@use "position" with (
+  $positions: if(meta.global-variable-exists("positions", "variables"), variables.$positions, null),
+);
+
+@use "screenreaders";
+
+@use "sizing" with (
+  $abbreviations: if(meta.global-variable-exists("sizing-abbreviations", "variables"), variables.$sizing-abbreviations, null),
+  $breakpoints: if(meta.global-variable-exists("sizing-breakpoints", "variables"), variables.$sizing-breakpoints, null),
+  $sizes: if(meta.global-variable-exists("sizes", "variables"), variables.$sizes, null),
+);
+
+@use "spacing" with (
+  $abbreviations: if(meta.global-variable-exists("spacing-abbreviations", "variables"), variables.$spacing-abbreviations, null),
+  $breakpoints: if(meta.global-variable-exists("spacing-breakpoints", "variables"), variables.$spacing-breakpoints, null),
+  $spacers: if(meta.global-variable-exists("spacers", "variables"), variables.$spacers, null),
+);
+
+@use "text" with (
+  $align-breakpoints: if(meta.global-variable-exists("text-align-breakpoints", "variables"), variables.$text-align-breakpoints, null),
+  $text-colors: if(meta.global-variable-exists("text-colors", "variables"), variables.$text-colors, null),
+);
+
+@use "visibility";

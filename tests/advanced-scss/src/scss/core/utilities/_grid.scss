@@ -1,0 +1,89 @@
+@use "sass:math";
+@use "../../abstract/mixins";
+
+$max-columns: 12 !default;
+$breakpoints: mixins.get-breakpoint-keys() !default;
+$gap-breakpoints: $breakpoints !default;
+$gap-css-variable-name: "grid-gap" !default;
+$gap-default: 2rem !default;
+
+$gap-values: (
+  "": $gap-default,
+  0: 0,
+) !default;
+
+// The list of gap properties for which class variants should be created.
+$properties: gap, row-gap, column-gap !default;
+
+.grid,
+[class*="grid-columns-"] {
+  display: grid;
+  gap: var(--#{$gap-css-variable-name}, #{$gap-default});
+}
+
+@each $breakpoint in $breakpoints {
+  @if mixins.has-breakpoint($breakpoint) {
+    @include mixins.media-breakpoint-up($breakpoint) {
+      $infix: mixins.breakpoint-infix($breakpoint);
+      .grid-#{$breakpoint} {
+        display: grid;
+        gap: var(--#{$gap-css-variable-name}, #{$gap-default});
+      }
+
+      .grid-col#{$infix}-auto {
+        grid-column-end: auto;
+      }
+
+      @if $max-columns > 0 {
+        @for $i from 1 through $max-columns {
+          .grid-columns#{$infix}-#{$i} {
+            grid-template-columns: repeat($i, 1fr);
+          }
+        }
+
+        // We duplicate the same loop here in order to separate the rules,
+        // so they keep organized.
+        @for $i from 1 through $max-columns {
+          .grid-col-span#{$infix}-#{$i} {
+            grid-column-end: span $i;
+          }
+        }
+      }
+
+      @if $max-columns > 1 {
+        @for $i from 1 through $max-columns {
+          .grid-col-start#{$infix}-#{$i} {
+            grid-column-start: $i;
+          }
+        }
+      }
+
+      .order#{$infix}-first { order: -1; }
+      .order#{$infix}-last { order: $max-columns + 1; }
+
+      @for $i from 0 through $max-columns {
+        .order#{$infix}-#{$i} { order: $i; }
+      }
+    }
+  }
+}
+
+@mixin -grid-gaps($value, $suffix: "gap") {
+  @each $property in $properties {
+    .#{$property}#{$suffix} {
+      #{$property}: $value;
+    };
+  }
+}
+
+@each $key, $value in $gap-values {
+  @each $breakpoint in $gap-breakpoints {
+    $infix: mixins.breakpoint-infix($breakpoint);
+    $suffix: if($key == "", $key, "-#{$key}");
+    @include -grid-gaps($value, #{$infix}#{$suffix});
+  }
+}
+
+.gap-2 {
+  grid-gap: calc(var(--#{$gap-css-variable-name}, #{$gap-default}) * 2);
+}

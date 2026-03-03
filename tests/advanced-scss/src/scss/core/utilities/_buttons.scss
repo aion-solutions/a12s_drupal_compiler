@@ -1,0 +1,64 @@
+@use "sass:map";
+@use "sass:meta";
+@use "../../abstract/variables/theme/buttons";
+@use "../../abstract/functions/variables-helpers" as helpers;
+
+$button-colors: (
+  "black": white,
+  "white": black
+) !default;
+
+$button-bg-colors: (
+  "black": black,
+  "white": white,
+) !default;
+
+$button-border-colors: (
+  "black": white,
+  "white": black,
+) !default;
+
+$button-hover-colors: (
+  "black": black,
+  "white": white,
+) !default;
+
+$button-hover-bg-colors: (
+  "black": white,
+  "white": black,
+) !default;
+
+$button-hover-border-colors: (
+  "black": black,
+  "white": white,
+) !default;
+
+$variants : ["xs"] !default;
+
+$variables: meta.module-variables("buttons");
+
+.btn {
+  border-radius: var(--btn-border-radius);
+  cursor: pointer;
+  display: var(--btn-display);
+  font-size: var(--btn-font-size);
+  font-weight: var(--btn-font-weight);
+  padding: var(--btn-padding);
+  text-transform: var(--btn-text-transform);
+  transition: var(--btn-transition);
+}
+
+
+@each $color, $value in $button-colors {
+  .btn-#{$color} {
+    background-color: map-get($button-bg-colors, $color);
+    border: 1px solid map-get($button-border-colors, $color);
+    color: $value;
+
+    &:hover {
+      background-color: map-get($button-hover-bg-colors, $color);
+      border-color: map-get($button-hover-border-colors, $color);
+      color: map-get($button-hover-colors, $color);
+    }
+  }
+}

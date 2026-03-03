@@ -1,0 +1,78 @@
+@use 'sass:list';
+
+@mixin positioning(
+  $positioning: 0,
+  $position: absolute,
+  $height: null,
+  $width: null
+) {
+  $top: null;
+  $right: null;
+  $bottom: null;
+  $left: null;
+  $length: list.length($positioning);
+
+  @if $length == 1 {
+    $top: list.nth($positioning, 1);
+    $right: list.nth($positioning, 1);
+    $bottom: list.nth($positioning, 1);
+    $left: list.nth($positioning, 1);
+  }
+  @else if $length == 2 {
+    $top: list.nth($positioning, 1);
+    $right: list.nth($positioning, 2);
+    $bottom: list.nth($positioning, 1);
+    $left: list.nth($positioning, 2);
+  }
+  @else if $length == 3 {
+    $top: list.nth($positioning, 1);
+    $right: list.nth($positioning, 2);
+    $bottom: list.nth($positioning, 3);
+    $left: list.nth($positioning, 2);
+  }
+  @else if $length > 3 {
+    $top: list.nth($positioning, 1);
+    $right: list.nth($positioning, 2);
+    $bottom: list.nth($positioning, 3);
+    $left: list.nth($positioning, 4);
+  }
+
+  @if $bottom != null {
+    bottom: $bottom;
+  }
+
+  @if $height != null {
+    height: $height;
+  }
+
+  @if $left != null {
+    left: $left;
+  }
+
+  position: $position;
+
+  @if $right != null {
+    right: $right;
+  }
+
+  @if $top != null {
+    top: $top;
+  }
+
+  @if $width != null {
+    width: $width;
+  }
+
+  @content;
+}
+
+@mixin pseudo-positioning($pseudo: before, $absolute-cover-options...) {
+  &:#{$pseudo} {
+    content: "";
+    display: block;
+
+    @include positioning($absolute-cover-options...) {
+      @content;
+    }
+  }
+}

@@ -1,0 +1,70 @@
+$color: black !default;
+$color-hover: gray !default;
+$text-decoration-default: none !default;
+$text-decoration-hover: underline !default;
+
+@mixin hover-focus {
+  &:hover,
+  &:focus {
+    @content;
+  }
+}
+
+@mixin link(
+  $color: $color,
+  $color-hover: $color-hover,
+  $color-focus: $color-hover,
+  $text-decoration-default: $text-decoration-default,
+  $text-decoration-hover: $text-decoration-hover,
+  $text-decoration-focus: $text-decoration-hover
+) {
+  color: $color;
+
+  @if $text-decoration-default != false {
+    text-decoration: $text-decoration-default;
+  }
+
+  @if $color-hover == $color-focus {
+    @if $color-hover != false {
+      @include hover-focus {
+        color: $color-hover;
+      }
+    }
+  }
+  @else {
+    @if $color-hover != false {
+      &:hover {
+        color: $color-hover;
+      }
+    }
+
+    @if $color-focus != false {
+      &:hover {
+        color: $color-focus;
+      }
+    }
+  }
+
+  @if $text-decoration-hover == $text-decoration-focus {
+    @if $text-decoration-hover != false {
+      @include hover-focus {
+        text-decoration: $text-decoration-hover;
+      }
+    }
+  }
+  @else {
+    @if $text-decoration-hover != false {
+      &:hover {
+        text-decoration: $text-decoration-hover;
+      }
+    }
+
+    @if $text-decoration-focus != false {
+      &:hover {
+        text-decoration: $text-decoration-focus;
+      }
+    }
+  }
+
+  @content;
+}

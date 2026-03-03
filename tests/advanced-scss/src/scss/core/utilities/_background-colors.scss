@@ -1,0 +1,15 @@
+@use "../../abstract/variables/options";
+
+$colors: (
+  "white": white,
+  "black": black,
+  "transparent": transparent,
+) !default;
+
+@if options.$enable-background-colors {
+  @each $color, $value in $colors {
+    .bg-#{$color} {
+      background-color: $value;
+    }
+  }
+}

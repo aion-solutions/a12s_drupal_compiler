@@ -1,0 +1,119 @@
+#
+# SVG Sprite configuration
+#
+svgSprite:
+  enabled: false
+  # Source directory containing individual SVG files
+  source: "src/svgs/icons"
+  # Destination directory for generated sprite
+  dest: "assets/sprites"
+  # gulp-svg-sprite configuration
+  # https://github.com/svg-sprite/svg-sprite
+  config:
+    svg:
+      xmlDeclaration: '<?xml version="1.0" encoding="utf-8"?>'
+      doctypeDeclaration: false
+      namespaceIDs: false
+      namespaceIDPrefix: ''
+      namespaceClassnames: false
+      dimensionAttributes: true
+      #rootAttributes: {}
+      #precision: -1
+    shape:
+      dimension:
+        maxWidth: 48
+        maxHeight: 48
+        precision: 2
+      spacing:
+        box: 'icon' # 'padding' | 'content'
+        #padding: 0
+      transform:
+        # SVG Optimizer (SVGO) configuration
+        svgo:
+          # https://svgo.dev/docs/plugins/
+          plugins:
+            - name: 'preset-default'
+              params:
+                overrides:
+                  cleanupIds:
+                    preservePrefixes: ['svgs-']
+                  inlineStyles:
+                    onlyMatchedOnce: false
+            # Make sure the viewBox is defined.
+            - 'removeDimensions'
+    mode:
+      icons:
+        mode: "stack"
+        # Enable cache busting
+        bust: true
+        # Sprite destination (relative to dest)
+        dest: "svg-icons"
+        # Prefix for CSS class names, only necessary if mode.css.render.s?css
+        # is true.
+        prefix: ".icon-%s"
+        # CSS selector suffix for shape dimension rules ("" for inline)
+        dimensions: ""
+        # Sprite path and filename (relative to --css-dest)
+        sprite: "icons.svg"
+        # Whether to render an example HTML document
+        example:
+          # HTML document destination (relative to the --css-dest)
+          dest: "icons.html"
+          # HTML document Mustache template (relative to svg-sprite basedir)
+          template: "templates/icons/stack.html"
+        # @todo move the "icons" generation to a cutom roperty with already
+        #   working defaults.
+        icons:
+          scssSettingsfile: '%rootDir%/%sourceDir%/src/scss/abstract/variables/_%mode%-icons.scss'
+          scssRootfile: '%rootDir%/%sourceDir%/src/scss/abstract/variables/_%mode%-icons-root.scss'
+          scssIconsfile: '%rootDir%/%sourceDir%/src/scss/%mode%-icons.scss'
+          # Prefix for CSS class names and root variables.
+          prefix: 'icon'
+
+#
+# SASS configuration.
+#
+scss:
+  enabled: true
+  # The "dirs" option can be a string. In such case, the compiler will only
+  # compile files from that directory and put the output in the same folder.
+  # But it can also be an array of directories or objects.
+  #dirs:
+  #  # Assume the compiled CSS files will be in the same folder as the SCSS files.
+  #  - "src/scss/"
+  #  - "src/other-folder/"
+  #  - source: "src/still-another-scss/"
+  #    dest: "dist/css/"
+  #    pattern: "**/*.scss"
+  #    cleanPattern: "/**/*.{css,css.map}"
+  #    variables:
+  #      definitionFile: relative-path-from-source/../my-definition.sass.yml
+  #      targetDir: relative-path-from-source/abstract/variables
+  dirs: "src/"
+  # Enables additional debugging information in the output file as CSS
+  # comments - only use when necessary
+  sourceComments: false
+  sourceMapEmbed: false
+  # tell the compiler whether you want "expanded" or "compressed" output code
+  outputStyle: "expanded"
+  # https://github.com/ai/browserslist#queries
+  autoPrefixerBrowsers:
+    - "last 2 versions"
+    - "IE >= 10"
+  includePaths:
+    - "./node_modules"
+
+#
+# Vendor assets
+#
+assets:
+  enabled: false
+  targetDefaultPath: 'assets/vendor/{name}'
+  paths: []
+  # examplePaths:
+  #   - 'my-library'
+  #   -
+  #     library: 'vanilla-back-to-top'
+  #     name: 'foo' # default to NULL
+  #     subPath: 'dist/' # default to ''
+  #     target: 'path/other' # default to NULL

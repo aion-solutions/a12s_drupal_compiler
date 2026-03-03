@@ -1,0 +1,68 @@
+$border-width: 1px !default;
+$border-radius-sm: .1rem !default;
+$border-radius: .2rem !default;
+$enable-borders: true !default;
+
+$colors: (
+  "white": white,
+) !default;
+
+@if $enable-borders {
+  .border         { border: var(--border-width, $border-width) solid; }
+  .border-top     { border-top: var(--border-width, $border-width) solid; }
+  .border-right   { border-right: var(--border-width, $border-width) solid; }
+  .border-bottom  { border-bottom: var(--border-width, $border-width) solid; }
+  .border-left    { border-left: var(--border-width, $border-width) solid; }
+
+  .border-0        { border: 0; }
+  .border-top-0    { border-top: 0; }
+  .border-right-0  { border-right: 0; }
+  .border-bottom-0 { border-bottom: 0; }
+  .border-left-0   { border-left: 0; }
+
+  @each $color, $value in $colors {
+    .border-#{$color} {
+      border-color: $value;
+    }
+  }
+
+  //
+  // Border-radius
+  //
+
+  .rounded-sm {
+    border-radius: var(--border-radius-sm, $border-radius-sm) !important;
+  }
+
+  .rounded {
+    border-radius: var(--border-radius, $border-radius);
+  }
+
+  .rounded-top {
+    border-top-left-radius: var(--border-radius, $border-radius);
+    border-top-right-radius: var(--border-radius, $border-radius);
+  }
+
+  .rounded-right {
+    border-top-right-radius: var(--border-radius, $border-radius);
+    border-bottom-right-radius: var(--border-radius, $border-radius);
+  }
+
+  .rounded-bottom {
+    border-bottom-right-radius: var(--border-radius, $border-radius);
+    border-bottom-left-radius: var(--border-radius, $border-radius);
+  }
+
+  .rounded-left {
+    border-top-left-radius: var(--border-radius, $border-radius);
+    border-bottom-left-radius: var(--border-radius, $border-radius);
+  }
+
+  .rounded-circle {
+    border-radius: 50%;
+  }
+
+  .rounded-0 {
+    border-radius: 0;
+  }
+}

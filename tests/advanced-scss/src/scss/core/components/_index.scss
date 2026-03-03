@@ -1,0 +1,10 @@
+@use "sass:meta";
+@use "../../abstract/variables";
+@use "../../abstract/variables/options";
+
+@use "breadcrumb";
+@use "menu" with (
+  $menu-link-padding-x: if(meta.global-variable-exists("menu-link-padding-x", "variables"), variables.$menu-link-padding-x, null),
+  $menu-link-padding-y: if(meta.global-variable-exists("menu-link-padding-y", "variables"), variables.$menu-link-padding-y, null),
+);
+@use "ui-dialog";

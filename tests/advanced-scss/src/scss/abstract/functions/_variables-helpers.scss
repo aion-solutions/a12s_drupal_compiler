@@ -1,0 +1,62 @@
+//
+// This file isn't included to the functions module, as it is only necessary for internal process.
+//
+// @internal
+//
+
+@use "sass:string";
+@use "sass:map";
+@use "sass:meta";
+
+@function gather-properties($variables, $prefix, $separator: "-") {
+  $properties: ();
+  $index: string.length($prefix) + string.length($separator);
+
+  @each $key in $variables {
+    $key-prefix: string.slice($key, 1, $index);
+    $property: string.slice($key, ($index + 1));
+
+    @if $key-prefix == "#{$prefix}#{$separator}" and string.length($property) >= 3 {
+      $properties: map.set($properties, $property, $key);
+    }
+  }
+
+  @return $properties;
+}
+
+@function gather-root-variables($variables-per-breakpoint, $variables) {
+  @each $key, $value in $variables {
+    @if meta.type-of($value) == "map" {
+      @each $breakpoint, $nested-value in $value {
+        $variables-per-breakpoint: -set-variable-per-breakpoint($variables-per-breakpoint, $breakpoint, $key, $nested-value);
+      }
+    }
+    @else {
+      $variables-per-breakpoint: -set-variable-per-breakpoint($variables-per-breakpoint, "", $key, $value);
+    }
+  }
+
+  @return $variables-per-breakpoint;
+}
+
+@function -set-variable-per-breakpoint($variables-per-breakpoint, $breakpoint, $key, $value) {
+  $nested-variables: if(map.has-key($variables-per-breakpoint, $breakpoint), map.get($variables-per-breakpoint, $breakpoint), ());
+  $nested-variables: map.set($nested-variables, $key, $value);
+  @return map.set($variables-per-breakpoint, $breakpoint, $nested-variables);
+}
+
+@mixin print-css-variables($variables) {
+  @each $key, $value in $variables {
+    --#{$key}: #{meta.inspect($value)};
+  }
+}
+
+@mixin print-selectors($selectors, $properties) {
+  @if meta.type-of($properties) == "map" {
+    #{$selectors} {
+      @each $property, $name in $properties {
+        #{$property}: var(--#{$name});
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+$<%= prefix %>-base-class: "<%= cssBaseClass %>";
+$<%= prefix %>-prefix: "<%= prefix %>-";
+
+$<%= prefix %>--names: (
+<% icons.forEach(function(icon, id) { -%>
+  <%= id %>: "<%= prefix %>-<%= id %>",
+<% }); -%>
+);

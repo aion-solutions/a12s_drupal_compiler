@@ -1,0 +1,53 @@
+@use "../../abstract/mixins";
+@use "../../abstract/variables";
+
+$menu-link-padding-x: 1.25rem !default;
+$menu-link-padding-y: .375rem !default;
+
+// Base class
+//
+// Kickstart any navigation component with a set of style resets. Works with
+// `<nav>`s, `<ul>`s or `<ol>`s.
+//
+// Expected structure (The [] wrapper means that the class is optional):
+//
+// ul.menu
+//  ├── li.[menu-item]
+//  │ ├── a.menu-link
+//  │ └── ul.[menu]
+//  │     ├── li.[menu-item]
+//  │     │   └── a.menu-link
+//  │     ├── li.[menu-item]
+//  │     │   └── a.menu-link
+//  │     └── li.[menu-item]
+//  │         └── a.menu-link
+//  └── li.[menu-item]
+//      └── span.menu-link
+
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+
+  .menu-item {
+    color: var(--menu-link-color);
+    cursor: pointer;
+    display: block;
+    font-size: var(--menu-link-font-size);
+    padding: var(--menu-link-padding-y, $menu-link-padding-y) var(--menu-link-padding-x, $menu-link-padding-x);
+
+    @include mixins.hover-focus() {
+      color: var(--gray-600);
+    }
+  }
+
+  .menu-link {
+    text-decoration: none;
+
+    @include mixins.hover-focus() {
+      text-decoration: none;
+    }
+  }
+}

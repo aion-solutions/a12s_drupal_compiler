@@ -1,0 +1,15 @@
+@use "../abstract/mixins";
+
+#back-to-top {
+  transition: all .2s ease-in-out;
+  z-index: 100;
+
+  @include mixins.media-breakpoint-up(lg) {
+    right: 40px;
+  }
+
+  &:hover {
+    background-color: var(--sand-2);
+    color: var(--primary);
+  }
+}
