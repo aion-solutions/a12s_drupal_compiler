@@ -62,9 +62,21 @@ class CompileSass extends BaseCommand
 
     // Get node_modules path
     $nodeModulesPath = $input->getOption('node-modules-path');
+
+    // @todo Generate a hash based on the required packages and allow extending
+    //   the package.json in the a12s_compiler.
     if (!$nodeModulesPath) {
       if (isset($extra['a12s_compiler']['node-modules-path'])) {
-        $nodeModulesPath = realpath($extra['a12s_compiler']['node-modules-path']);
+        $nodeModulesPath = $extra['a12s_compiler']['node-modules-path'];
+
+        if (!file_exists($nodeModulesPath)) {
+          if (!mkdir($nodeModulesPath, 0755, true) && !is_dir($nodeModulesPath)) {
+            $output->writeln("<error>Failed to create directory: {$nodeModulesPath}</error>");
+            return 1;
+          }
+        }
+
+        $nodeModulesPath = realpath($nodeModulesPath);
       }
       else {
         $nodeModulesPath = $rootDir . '/node_modules';
@@ -94,10 +106,14 @@ class CompileSass extends BaseCommand
 
     $output->writeln('<info>$a12sCompileDir:</info> ' . $a12sCompileDir);
 
+    // @todo manage optional parameters for:
+    //   - build-dev
+    //   - build-css
+    //   - ...
     // Build Docker command
     $dockerCommand = [
       'docker', 'run', '--rm',
-      '-v', "{$a12sCompileDir}/builder:/app",
+      '-v', "{$a12sCompileDir}/build:/app",
       '-v', "{$absoluteSourcesPath}:/app/sources",
       '-v', "{$absoluteNodeModulesPath}:/app/node_modules",
       '-w', '/app',

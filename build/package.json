@@ -19,8 +19,9 @@
     "build": "NODE_ENV=production gulp build",
     "build-css": "NODE_ENV=production gulp build -t css",
     "build-svg-sprite": "NODE_ENV=production gulp build -t svg-sprite",
-    "build-dev": "gulp build",
-    "build-css-dev": "gulp build -t css"
+    "build-dev": "gulp build --verbose",
+    "build-css-dev": "gulp build -t css --verbose",
+    "build-svg-sprite-dev": "gulp build -t svg-sprite --verbose"
   },
   "dependencies": {
     "@types/gulp": "^4.0",

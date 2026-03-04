@@ -54,7 +54,7 @@ class Configuration {
     debug: false,
     rootDir: '.',
     sourcesDir: './sources',
-    types: ['css'],
+    types: ['svg-sprite', 'css'],
     verbose: false,
   };
 
@@ -66,6 +66,7 @@ class Configuration {
    * @param {Partial<Configuration~options>} options
    */
   constructor(options) {
+    // @todo merge recursively, except for some specific properties.
     Object.assign(this.#options, Configuration.defaultOptions, options);
 
     if (this.getOption('verbose')) {
@@ -149,7 +150,7 @@ class Configuration {
           }
         }
       }
-      
+
       this.#settings = {
         scss: new ScssSettings(rawConfiguration.scss || {}),
         svgSprite: new SvgSpriteSettings(rawConfiguration.svgSprite || {}),

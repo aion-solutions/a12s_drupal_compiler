@@ -1,0 +1,73 @@
+@use "sass:map";
+@use "<%= relativePaths.mixins.toSettings %>";
+$<%= prefix %>-default-color: black !default;
+
+@mixin <%= prefix %>-base($color: $<%= prefix %>-default-color, $display: inline-block, $height: null, $width: null) {
+  background-color: $color;
+  display: $display;
+  height: $height;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: cover;
+  overflow: hidden;
+  width: $width;
+}
+
+@mixin <%= prefix %>-replace(/*$pseudo*/) {
+  text-indent: 200%;
+  white-space: nowrap;
+
+//  @if $pseudo {
+//    &:#{$pseudo} {
+//      position: absolute;
+//      height: 100%;
+//      text-align: center;
+//      top: 0;
+//    }
+//  }
+}
+
+/**
+ * Stack Icons mixin.
+ *
+ * @param {String} $icon - Name of icon.
+ * @param {String} $pseudo [before] - `before` | `after` The pseudo element to place the icon in.
+ * @todo Allow `$pseudo: false` to be declared so we don't have to use a pseudo element if we don't want to.
+ * @param {Bool} $text-replace [false]
+ * @param {String} $size [inherit]
+ * @param {String} $color [inherit]
+ * @param {String} $display [inline-block]
+ *
+ * @example scss
+ * .class {
+ *   @include <%= prefix %>('close');
+ * }
+ */
+@mixin <%= prefix %>(
+  $icon: null,
+  $pseudo: before,
+  $text-replace: false,
+  $size: inherit,
+  $color: $<%= prefix %>-default-color,
+  $display: inline-block
+) {
+  @if map.has-key(<%= modules.settings %>.$<%= prefix %>--names %>, $icon) {
+    @if $pseudo {
+      &:#{$pseudo} {
+        @include <%= prefix %>-base($color, $display);
+        mask-clip: var(#{'--' + map.get(<%= modules.settings %>.$<%= prefix %>--names %>, $icon)});
+        @content;
+      }
+    }
+    @else {
+      @include <%= prefix %>-base($color, $display);
+      mask-clip: var(#{'--' + map.get(<%= modules.settings %>.$<%= prefix %>--names, $icon)});
+      @content;
+    }
+
+    // Replace text with icon, like classic sprites
+    @if $text-replace {
+      @include <%= prefix %>-replace($pseudo);
+    }
+  }
+}

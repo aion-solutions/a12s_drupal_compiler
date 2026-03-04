@@ -1,0 +1,43 @@
+@use "<%= relativePaths.icons.toSettings %>";
+@use "<%= relativePaths.icons.toMixins %>";
+<% if (includeRootInMainFile) { -%>
+@use "<%= relativePaths.icons.toRoot %>";
+<% } -%>
+
+.#{<%= modules.settings %>.$<%= prefix %>-base-class} {
+<% if (dimensions) { -%>
+<% if (defineDimensionsInRootVariables) { -%>
+  @include <%= modules.mixins %>.<%= prefix %>-base($height: var(--<%= prefix %>-height), $width: var(--<%= prefix %>-width));
+<% } else { -%>
+  @include <%= modules.mixins %>.<%= prefix %>-base($height: <%= dimensions.height %>, $width: <%= dimensions.width %>);
+<% } -%>
+<% } else { -%>
+  @include <%= modules.mixins %>.<%= prefix %>-base();
+<% } -%>
+}
+
+.#{<%= modules.settings %>.$<%= prefix %>-base-class}--replace {
+  @include <%= modules.mixins %>.<%= prefix %>-replace();
+}
+
+<% if (useRootVariables && !defineDimensionsInClasses) { -%>
+@each $id in $<%= prefix %>--names {
+  .#{$id} {
+    background-image: var(#{'--' + $id + '-url'});
+  }
+}
+<% } else { -%>
+<% icons.forEach(function(icon, id) { -%>
+.#{<%= modules.settings %>.$<%= prefix %>-prefix}<%= id %> {
+<% if (useRootVariables) { -%>
+  background-image: var(--<%= prefix %>-<%= id %>-url);
+<% } else { -%>
+  background-image: url(#{ $relative-path + '<%= spriteFileName %>#<%= id %>' });
+<% } -%>
+<% if (!dimensions && defineDimensionsInClasses) { -%>
+  height: <%= icon.height %>px;
+  width: <%= icon.width %>px;
+<% } -%>
+}
+<% }); %>
+<% } -%>

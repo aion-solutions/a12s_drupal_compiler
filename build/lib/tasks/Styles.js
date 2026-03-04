@@ -109,6 +109,7 @@ module.exports = class Styles {
         path.resolve(targetDir, '../_index.scss'),
         '_index.scss',
         {
+          // This is outdated, find a way to handle sprite icons.
           iconsEnabled: config.icons?.enabled || false,
         }
       );

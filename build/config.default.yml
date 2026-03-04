@@ -42,7 +42,7 @@ svgSprite:
             # Make sure the viewBox is defined.
             - 'removeDimensions'
     mode:
-      icons:
+      - name: icons
         mode: "stack"
         # Enable cache busting
         bust: true
@@ -60,15 +60,17 @@ svgSprite:
           # HTML document destination (relative to the --css-dest)
           dest: "icons.html"
           # HTML document Mustache template (relative to svg-sprite basedir)
-          template: "templates/icons/stack.html"
+          template: "templates/icons/stack/sprite.html"
         # @todo move the "icons" generation to a cutom roperty with already
         #   working defaults.
         icons:
-          scssSettingsfile: '%rootDir%/%sourceDir%/src/scss/abstract/variables/_%mode%-icons.scss'
+          scssSettingsfile: '%rootDir%/%sourceDir%/src/scss/abstract/variables/_%mode%-icons-settings.scss'
           scssRootfile: '%rootDir%/%sourceDir%/src/scss/abstract/variables/_%mode%-icons-root.scss'
-          scssIconsfile: '%rootDir%/%sourceDir%/src/scss/%mode%-icons.scss'
+          scssMixinsfile: '%rootDir%/%sourceDir%/src/scss/abstract/mixins/_%mode%-icons.scss'
+          scssIconsfile: '%rootDir%/%sourceDir%/src/scss/%mode%-icons-standalone.scss'
           # Prefix for CSS class names and root variables.
-          prefix: 'icon'
+          # @todo change this name as it is more than a prefix.
+          prefix: '%mode%-icon'
 
 #
 # SASS configuration.
