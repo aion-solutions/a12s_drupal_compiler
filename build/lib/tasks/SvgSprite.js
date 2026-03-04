@@ -269,6 +269,15 @@ class SvgIconsBuilder {
     iconsConfig.prefix = this.replacePatterns(iconsConfig.prefix, replacements);
     iconsConfig.cssBaseClass = this.replacePatterns(iconsConfig.cssBaseClass, replacements);
 
+    // Fill default values according to svg-sprite documentation.
+    // @see https://github.com/svg-sprite/svg-sprite/blob/main/docs/configuration.md#common-mode-properties
+    if (iconsConfig.example === true) {
+      iconsConfig.example = {
+        template: `${iconsConfig.mode}/sprite.html`, // Not really necessary for us at the moment.
+        dest: `sprite.${iconsConfig.mode}.html`,
+      }
+    }
+
     if (this.verbose) {
       console.log('Icon configuration: ', iconsConfig);
     }
@@ -286,8 +295,10 @@ class SvgIconsBuilder {
   getConfigDefaults(key, modeConfig) {
     return {
       bust: modeConfig.bust || false,
+      bustInQueryString: true,
       sprite: modeConfig.sprite || 'sprite.svg',
       prefix: '%mode%-icons',
+      example: modeConfig.example || false,
       scssSettingsfile:  '%destDir%/_%mode%-icons.variables.scss',
       scssRootfile: '%destDir%/_%mode%-icons.root.scss',
       scssIconsfile: '%destDir%/%mode%-icons.scss',
@@ -332,12 +343,14 @@ class SvgIconsBuilder {
 
     for (const [key, iconsConfig] of this.modes.entries()) {
       let spriteFileName = iconsConfig.sprite;
+      let spriteHash;
 
       if (iconsConfig.bust && fs.existsSync(iconsConfig.dest)) {
         // If bust is true, a random string was added before the extension; we
         // need to find the actual file since the name is dynamic.
         const ext = path.extname(spriteFileName);
         const baseName = path.basename(spriteFileName, ext);
+
         // Create regex to match: baseName-[hex chars].extension
         const spriteRegex = new RegExp(`^${baseName}-[a-f0-9]+${ext.replace('.', '\\.')}$`);
 
@@ -345,7 +358,31 @@ class SvgIconsBuilder {
         const files = fs.readdirSync(iconsConfig.dest);
         const spriteFile = files.find(file => spriteRegex.test(file));
 
-        spriteFileName = spriteFile || iconsConfig.sprite;
+        // Alters the generated sprite name as we need to keep a consistent file
+        // name; the way svg-prite uses to add the bust hash to the sprite file
+        // name cannot work when its URL is used in user content.
+        if (iconsConfig.bustInQueryString && spriteFile) {
+          // Extract the hash part from the filename.
+          const hashMatch = spriteFile.match(new RegExp(`^${baseName}-([a-f0-9]+)${ext.replace('.', '\\.')}$`));
+          spriteHash = hashMatch ? hashMatch[1] : '';
+          // Rename the file to its original name without the hash.
+          fs.renameSync(path.join(iconsConfig.dest, spriteFile), path.join(iconsConfig.dest, spriteFileName));
+          spriteFileName += '?' + spriteHash;
+
+          // Replace the sprite name in the generated example file if applicable.
+          if (iconsConfig.example?.dest) {
+            const exampleFile = path.join(iconsConfig.dest, iconsConfig.example.dest);
+
+            if (fs.existsSync(exampleFile)) {
+              const exampleFileContent = fs.readFileSync(exampleFile, 'utf8');
+              const updatedContent = exampleFileContent.replace(new RegExp(spriteFile.replace('.', '\\.'), 'g'), spriteFileName);
+              fs.writeFileSync(exampleFile, updatedContent, 'utf8');
+            }
+          }
+        }
+        else {
+          spriteFileName = spriteFile || iconsConfig.sprite;
+        }
       }
 
       if (this.verbose) {
@@ -368,6 +405,8 @@ class SvgIconsBuilder {
       }
 
       config.writeFileFromTemplate(iconsConfig.scssIconsfile, `icons/${iconsConfig.mode}-icons.scss`, context);
+
+
     }
   }
 

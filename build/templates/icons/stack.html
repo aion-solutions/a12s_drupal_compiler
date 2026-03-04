@@ -57,8 +57,105 @@
         text-align: center;
       }
 
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
+
       .popover {
+        background: linear-gradient(135deg, #3657EB, #2e4bc4);
+        border: none;
+        border-radius: 8px;
+        color: white;
+        cursor: pointer;
+        font-weight: 500;
         margin-top: 12px;
+        padding: .6rem 1.2rem;
+        transition: all .2s ease;
+      }
+
+      .popover:hover {
+        box-shadow: 0 8px 20px rgba(54, 87, 235, .3);
+        transform: translateY(-2px);
+      }
+
+      .popover:active {
+        transform: translateY(0);
+      }
+
+      div[popover] {
+        max-height: calc(100vh - 6rem);
+        max-width: 960px;
+        padding: 2rem;
+        width: calc(100vw - 6rem);
+
+        /* Styling */
+        background-color: #fff;
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, .15);
+
+        /* Animation */
+        opacity: 0;
+        transform: scale(0.95) translateY(-10px);
+        transition: opacity .3s cubic-bezier(.4, 0, .2, 1),
+            transform .3s cubic-bezier(.4, 0, .2, 1);
+      }
+
+      div[popover]:popover-open {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+
+      div[popover]::backdrop {
+        backdrop-filter: blur(4px);
+        background-color: rgba(0, 0, 0, .4);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      div[popover]:popover-open::backdrop {
+        opacity: 1;
+      }
+
+      div[popover] .popover-inner {
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      div[popover] code {
+        background-color: #f5f5f5;
+        border-left: 3px solid #3657EB;
+        border-radius: 8px;
+        display: block;
+        font-family: 'Monaco', 'Menlo', monospace;
+        font-size: .75em;
+        overflow-x: auto;
+        padding: .75rem;
+      }
+
+      div[popover] h3 {
+        color: #333;
+        font-size: 1.1em;
+        margin: 1.5rem 0 .5rem;
+      }
+
+      div[popover] h3:first-child {
+        margin-top: 0;
+      }
+
+      div[popover] p {
+        color: #777;
+        line-height: 1.6;
+        margin: .75rem 0;
       }
 
       h1 {
@@ -205,7 +302,57 @@
             <h2>{{name}}</h2>
             <button class="popover" popovertarget="{{icons.cssBaseClass}}-{{name}}-popover">See code widget</button>
             <div popover id="{{icons.cssBaseClass}}-{{name}}-popover">
-                <code>&lt;i class=&quot;{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}&quot;&gt;{{name}}&lt;/i&gt;</code>
+                <div class="popover-inner">
+                    <div class="popover-icon-box">
+                        <h3>Illustrative icon</h3>
+                        <p>Used when the icon is purely decorative and doesn't convey essential information, as it is hidden from screen readers. Such icon should be used with adjacent text or context.</p>
+                        <i class="stack-icon icon-email" aria-hidden="true"></i>
+                        <code>&lt;i class=&quot;{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;</code>
+                    </div>
+
+                    <div class="popover-icon-box">
+                        <h3>Non-illustrative icon recognized by screen readers</h3>
+                        <p>Used when the icon is not purely decorative and conveys essential information.</p>
+                        <i class="{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}">{{name}}</i>
+                        <code>&lt;i class=&quot;{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}&quot;&gt;{{name}}&lt;/i&gt;</code>
+                    </div>
+
+                    <div class="popover-icon-box">
+                        <h3>Icon-Only Button</h3>
+                        <p>Used when the icon serves as a button without visible text.</p>
+                        <button type="button" class="{{icons.cssBaseClass}}-button" aria-label="{{name}}">
+                            <i class="{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}" aria-hidden="true"></i>
+                        </button>
+                        <code>
+                            &lt;button type=&quot;button&quot; class=&quot;{{icons.cssBaseClass}}-button&quot; aria-label=&quot;{{name}}&quot;&gt;
+                            &lt;i class=&quot;{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+                            &lt;/button&gt;
+                        </code>
+                        <p>A simpler version:</p>
+                        <code>
+                            <button type="button" class="{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}" aria-label="Send email"></button>
+                        </code>
+                    </div>
+
+                    <div class="popover-icon-box">
+                        <h3>Icon in a link</h3>
+                        <p>Used when the icon represents a link action.</p>
+                        <a href="#" class="{{icons.cssBaseClass}}-link">
+                            <i class="{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}" aria-hidden="true"></i>
+                            <span class="sr-only">{{name}}</span>
+                        </a>
+                    </div>
+
+                    <div class="popover-icon-box">
+                        <h3>Icon with visible text</h3>
+                        <p>Used when the icon is used alongside text, for example with a link.</p>
+                        <a href="#" class="{{icons.cssBaseClass}}-link">
+                            <i class="{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}" aria-hidden="true"></i>
+                            <span>{{name}} (or any custom text)</span>
+                        </a>
+                        <a href="#" class="{{icons.cssBaseClass}}-link"></a>
+                    </div>
+                </div>
             </div>
         </li>
     {{/shapes}}
