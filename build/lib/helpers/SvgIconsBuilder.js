@@ -30,7 +30,7 @@ class SvgIconsBuilder {
     this.icons = new Map();
     this.modes = new Map();
 
-    if (svgSpriteConfig.spacing?.box === 'icon') {
+    if (svgSpriteConfig.shape?.spacing?.box === 'icon') {
       const height = svgSpriteConfig.shape?.dimension?.maxHeight;
       const width = svgSpriteConfig.shape?.dimension?.maxWidth;
       this.dimensions = this.normalizeDimensions(height, width);
@@ -376,7 +376,7 @@ class SvgIconsBuilder {
       let spritePath = path.resolve(iconsConfig.dest, spriteFileName);
       spritePath = path.relative(path.dirname(iconsConfig.scssIconsfile), spritePath);
 
-      const context = {...iconsConfig, spriteFileName, icons, spritePath};
+      const context = {...iconsConfig, spriteFileName, icons, spritePath, dimensions: this.dimensions};
 
       config.writeFileFromTemplate(iconsConfig.scssSettingsfile, `icons/${iconsConfig.mode}/_settings.scss`, {
         ...context,

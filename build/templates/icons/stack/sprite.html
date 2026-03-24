@@ -1,371 +1,377 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>SVG stack preview | svg-sprite</title>
-    <style>
-      body {
-        padding: 0;
-        margin: 0;
-        color: #666;
-        background: #fafafa;
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 1em;
-        line-height: 1.4;
-      }
+  <meta charset="utf-8">
+  <title>SVG stack preview | svg-sprite</title>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      color: #666;
+      background: #fafafa;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 1em;
+      line-height: 1.4;
+    }
 
-      header {
-        display: block;
-        padding: 3em 3em 2em;
-        background-color: #fff;
-      }
+    header {
+      display: block;
+      padding: 3em 3em 2em;
+      background-color: #fff;
+    }
 
-      header p {
-        margin: 2em 0 0;
-      }
+    header p {
+      margin: 2em 0 0;
+    }
 
-      section {
-        border-top: 1px solid #eee;
-        padding: 2em 3em 0;
-      }
+    dt {
+      font-weight: bold;
+      margin-bottom: .5rem;
+    }
 
-      section ul {
-        margin: 0;
-        padding: 0;
-      }
+    dd {
+      margin-bottom: 1rem;
+    }
 
-      section li {
-        display: inline-block;
-        background-color: #fff;
-        position: relative;
-        margin: 0 2em 2em 0;
-        vertical-align: top;
-        border: 1px solid #ccc;
-        padding: 1em 1em 3em;
-        cursor: default;
-      }
+    section {
+      border-top: 1px solid #eee;
+      padding: 2em 3em 0;
+    }
 
-      .icon-box {
-        margin: 0;
-        width: 144px;
-        height: 144px;
-        position: relative;
-        background: #ccc url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath fill='%23fff' d='M6 0h6v6H6zM0 6h6v6H0z'/%3E%3C/svg%3E") top left repeat;
-        border: 1px solid #ccc;
-        display: table-cell;
-        vertical-align: middle;
-        text-align: center;
-      }
+    section ul {
+      margin: 0;
+      padding: 0;
+    }
 
-      .sr-only {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border-width: 0;
-      }
+    section li {
+      display: inline-block;
+      background-color: #fff;
+      position: relative;
+      margin: 0 2em 2em 0;
+      vertical-align: top;
+      border: 1px solid #ccc;
+      padding: 1em 1em 3em;
+      cursor: default;
+    }
 
-      .popover {
-        background: linear-gradient(135deg, #3657EB, #2e4bc4);
-        border: none;
-        border-radius: 8px;
-        color: white;
-        cursor: pointer;
-        font-weight: 500;
-        margin-top: 12px;
-        padding: .6rem 1.2rem;
-        transition: all .2s ease;
-      }
+    .icon-box {
+      margin: 0;
+      width: 144px;
+      height: 144px;
+      position: relative;
+      background: #ccc url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath fill='%23fff' d='M6 0h6v6H6zM0 6h6v6H0z'/%3E%3C/svg%3E") top left repeat;
+      border: 1px solid #ccc;
+      display: table-cell;
+      vertical-align: middle;
+      text-align: center;
+    }
 
-      .popover:hover {
-        box-shadow: 0 8px 20px rgba(54, 87, 235, .3);
-        transform: translateY(-2px);
-      }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
 
-      .popover:active {
-        transform: translateY(0);
-      }
+    .popover {
+      background: linear-gradient(135deg, #3657EB, #2e4bc4);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      font-weight: 500;
+      margin-top: 12px;
+      padding: .6rem 1.2rem;
+      transition: all .2s ease;
+    }
 
-      div[popover] {
-        max-height: calc(100vh - 6rem);
-        max-width: 960px;
-        padding: 2rem;
-        width: calc(100vw - 6rem);
+    .popover:hover {
+      box-shadow: 0 8px 20px rgba(54, 87, 235, .3);
+      transform: translateY(-2px);
+    }
 
-        /* Styling */
-        background-color: #fff;
-        border: none;
-        border-radius: 12px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, .15);
+    .popover:active {
+      transform: translateY(0);
+    }
 
-        /* Animation */
-        opacity: 0;
-        transform: scale(0.95) translateY(-10px);
-        transition: opacity .3s cubic-bezier(.4, 0, .2, 1),
-            transform .3s cubic-bezier(.4, 0, .2, 1);
-      }
+    div[popover] {
+      max-height: calc(100vh - 6rem);
+      max-width: 960px;
+      padding: 2rem;
+      width: calc(100vw - 6rem);
 
-      div[popover]:popover-open {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-      }
+      /* Styling */
+      background-color: #fff;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .15);
 
-      div[popover]::backdrop {
-        backdrop-filter: blur(4px);
-        background-color: rgba(0, 0, 0, .4);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
+      /* Animation */
+      opacity: 0;
+      transform: scale(0.95) translateY(-10px);
+      transition: opacity .3s cubic-bezier(.4, 0, .2, 1),
+      transform .3s cubic-bezier(.4, 0, .2, 1);
+    }
 
-      div[popover]:popover-open::backdrop {
-        opacity: 1;
-      }
+    div[popover]:popover-open {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
 
-      div[popover] .popover-inner {
-        display: grid;
-        gap: 2rem;
-        grid-template-columns: repeat(2, 1fr);
-      }
+    div[popover]::backdrop {
+      backdrop-filter: blur(4px);
+      background-color: rgba(0, 0, 0, .4);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
 
-      div[popover] code {
-        background-color: #f5f5f5;
-        border-left: 3px solid #3657EB;
-        border-radius: 8px;
-        display: block;
-        font-family: 'Monaco', 'Menlo', monospace;
-        font-size: .75em;
-        overflow-x: auto;
-        padding: .75rem;
-      }
+    div[popover]:popover-open::backdrop {
+      opacity: 1;
+    }
 
-      div[popover] h3 {
-        color: #333;
-        font-size: 1.1em;
-        margin: 1.5rem 0 .5rem;
-      }
+    div[popover] .popover-inner {
+      columns: 2;
+      gap: 2rem;
+    }
 
-      div[popover] h3:first-child {
-        margin-top: 0;
-      }
+    div[popover] .popover-icon-box {
+      break-inside: avoid-column;
+      margin-bottom: 2rem;
+    }
 
-      div[popover] p {
-        color: #777;
-        line-height: 1.6;
-        margin: .75rem 0;
-      }
+    div[popover] code {
+      background-color: #f5f5f5;
+      border-left: 3px solid #3657EB;
+      border-radius: 8px;
+      display: block;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: .75rem;
+      overflow-x: auto;
+      padding: .75rem;
+    }
 
-      h1 {
-        margin-top: 0;
-      }
+    div[popover] pre {
+      font-size: .75rem;
+    }
 
-      h2 {
-        margin: 0;
-        padding: 0;
-        font-size: 1em;
-        font-weight: 400;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        position: absolute;
-        left: 1em;
-        right: 1em;
-        bottom: 1em;
-      }
+    div[popover] h3 {
+      color: #333;
+      font-size: 1.1em;
+      margin: 1.5rem 0 .5rem;
+    }
 
-      footer {
-        display: block;
-        margin: 0;
-        padding: 0 3em 3em;
-      }
+    div[popover] h3:first-child {
+      margin-top: 0;
+    }
 
-      footer p {
-        margin: 0;
-        font-size: .7em;
-      }
+    div[popover] p {
+      color: #777;
+      line-height: 1.6;
+      margin: .75rem 0;
+    }
 
-      footer a {
-        color: #0f7595;
-        margin-left: 0;
-      }
-    </style>
+    h1 {
+      margin-top: 0;
+    }
 
-    <!--
-    Sprite CSS
-    ====================================================================================================
-    -->
+    h2 {
+      margin: 0;
+      padding: 0;
+      font-size: 1em;
+      font-weight: 400;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      position: absolute;
+      left: 1em;
+      right: 1em;
+      bottom: 1em;
+    }
 
-    <style>
-        :root {
-        {{#shapes}}
-            --{{icons.prefix}}-{{name}}-url: url("{{{example}}}#{{name}}");
-        {{/shapes}}
-        }
+    footer {
+      display: block;
+      margin: 0;
+      padding: 0 3em 3em;
+    }
 
-        .{{icons.cssBaseClass}}--img {
-            height: 48px;
-            width: 48px;
-        }
+    footer p {
+      margin: 0;
+      font-size: .7em;
+    }
 
-        .{{icons.cssBaseClass}} {
-            background-color: black;
-            display: inline-block;
-            height: 48px;
-            mask-position: center;
-            mask-repeat: no-repeat;
-            mask-size: cover;
-            overflow: hidden;
-            text-indent: 200%;
-            white-space: nowrap;
-            width: 48px;
-        }
+    footer a {
+      color: #0f7595;
+      margin-left: 0;
+    }
+  </style>
 
-        .{{icons.cssBaseClass}}:hover,
-        .{{icons.cssBaseClass}}:focus {
-            background-color: #3657EB;
-            background: linear-gradient(172deg,rgba(78, 192, 245, 1) 0%, rgba(54, 87, 235, 1) 100%);
-        }
+  <!--
+  Sprite CSS
+  ====================================================================================================
+  -->
 
-        {{#shapes}}
-        .{{icons.prefix}}-{{name}} {
-            mask-image: var(--{{icons.prefix}}-{{name}}-url);
-            /*width: {{width.outer}}px;
-            height: {{height.outer}}px;*/
-        }
-        {{/shapes}}
-    </style>
+  <style>
+    :root {
+    {{#shapes}}
+      --{{icons.prefix}}-{{name}}-url: url("{{{example}}}#{{name}}");
+    {{/shapes}}
+    }
 
-    <!--
-    ====================================================================================================
-    -->
+    .{{icons.cssBaseClass}}--img {
+       height: 48px;
+       width: 48px;
+     }
 
+    .{{icons.cssBaseClass}} {
+      background-color: black;
+      display: inline-block;
+      height: 48px;
+      mask-position: center;
+      mask-repeat: no-repeat;
+      mask-size: cover;
+      overflow: hidden;
+      text-indent: 200%;
+      white-space: nowrap;
+      width: 48px;
+    }
 
+    .{{icons.cssBaseClass}}:hover,
+    .{{icons.cssBaseClass}}:focus {
+      background-color: #3657EB;
+      background: linear-gradient(172deg,rgba(78, 192, 245, 1) 0%, rgba(54, 87, 235, 1) 100%);
+    }
+
+    {{#shapes}}
+    .{{icons.prefix}}-{{name}} {
+      mask-image: var(--{{icons.prefix}}-{{name}}-url);
+      /*width: {{width.outer}}px;
+      height: {{height.outer}}px;*/
+    }
+    {{/shapes}}
+  </style>
 </head>
+
 <body>
 <header>
-    <h1>SVG stack preview</h1>
-    <p>This preview features an SVG stack. Please have a look at the HTML source for further details and be aware of the following constraints:</p>
-    <ul>
-        <li>Your browser has to <a href="https://caniuse.com/svg-fragment" target="_blank" rel="noopener noreferrer">support SVG fragment identifiers</a> for SVG stacks to work.</li>
-        <li>Support for SVG fragment identifiers hasn't always been that decent. For older browsers you will have to use some prolyfill like <a href="https://github.com/preciousforever/SVG-Stacker/blob/master/fixsvgstack.jquery.js" target="_blank" rel="noopener noreferrer">fixsvgstack.jquery.js</a>.</li>
-    </ul>
+  <h1>SVG stack preview</h1>
+
+  <p>Some examples of source code are available under each widget.</p>
+  <dl>
+    <dt>Conventional CSS sprite (preferred):</dt>
+    <dd>This technique uses CSS classes to display portions of the sprite as background image of
+      appropriately sized elements.</dd>
+    <dt>Image HTML tag</dt>
+    <dd>
+      <p>SVG images make use of fragment identifiers (IDs) to reference
+        certain portions of the external sprite. By default, CSS hides all
+        shapes inside the sprite. The `:target` pseudo selector is used to
+        show the very shape referenced by the fragment identifier.</p>
+      <p>This preview features an SVG stack. Please be aware of the following:</p>
+      <ul>
+        <li>
+          Your browser has to <a href="https://caniuse.com/svg-fragment" target="_blank" rel="noopener noreferrer">
+          support SVG fragment identifiers</a> for SVG stacks to work.</li>
+        <li>Support for SVG fragment identifiers hasn't always been that decent.
+          For older browsers you will have to use some polyfill like
+          <a href="https://github.com/preciousforever/SVG-Stacker/blob/master/fixsvgstack.jquery.js" target="_blank" rel="noopener noreferrer">fixsvgstack.jquery.js</a>.</li>
+      </ul></dd>
+  </dl>
 </header>
+
 <section>
 
-    <!--
-    SVG stack
-    ====================================================================================================
-    These SVG images make use of fragment identifiers (IDs) to reference certain portions of the
-    external sprite. By default, all shapes inside the sprite are hidden by CSS. The `:target` pseudo
-    selector is used to show the very shape that is referenced by the fragment identifier.
-    -->
-
-    <ul>
+  <ul>
     {{#shapes}}
-        <li title="{{name}}">
-            <div class="icon-box">
-                <img src="{{{example}}}#{{name}}" class="{{icons.cssBaseClass}}--img {{icons.cssBaseClass}}--img-{{name}}" alt="{{name}}">
-            </div>
-        <h2>{{name}}</h2>
-        <button class="popover" popovertarget="{{icons.cssBaseClass}}--img-{{name}}-popover">See code widget</button>
-        <div popover id="{{icons.cssBaseClass}}--img-{{name}}-popover">
+    <li title="{{name}}">
+      <div class="icon-box">
+        <i class="{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}">{{name}}</i>
+      </div>
+      <h2>{{name}}</h2>
+      <button class="popover" popovertarget="{{icons.cssBaseClass}}-{{name}}-popover">See code widget</button>
+      <div popover id="{{icons.cssBaseClass}}-{{name}}-popover">
+        <div class="popover-inner">
+          <div class="popover-icon-box">
+            <h3>Illustrative icon</h3>
+            <p>Used when the icon is purely decorative and doesn't convey
+              essential information, as it is hidden from screen readers. Such
+              icon should be used with adjacent text or context.</p>
+            <i class="{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}" aria-hidden="true"></i>
+            <code>&lt;i class=&quot;{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;</code>
+          </div>
+
+          <div class="popover-icon-box">
+            <h3>Non-illustrative icon recognized by screen readers</h3>
+            <p>Used when the icon is not purely decorative and conveys essential
+              information.</p>
+            <i class="{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}">{{name}}</i>
+            <code>&lt;i class=&quot;{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}&quot;&gt;{{name}}&lt;/i&gt;</code>
+          </div>
+
+          <div class="popover-icon-box">
+            <h3>Icon-Only Button</h3>
+            <p>Used when the icon serves as a button without visible text.</p>
+            <button type="button" class="{{icons.cssBaseClass}}-button" aria-label="{{name}}">
+              <i class="{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}" aria-hidden="true"></i>
+            </button>
+            <code><pre>
+&lt;button type=&quot;button&quot; class=&quot;{{icons.cssBaseClass}}-button&quot; aria-label=&quot;{{name}}&quot;&gt;
+  &lt;i class=&quot;{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+&lt;/button&gt;
+            </pre></code>
+            <p>A simpler version:</p>
+            <code>
+              &lt;button type=&quot;button&quot; class=&quot;{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}&quot; aria-label=&quot;Send email&quot;&gt;&lt;/button&gt;
+            </code>
+          </div>
+
+          <div class="popover-icon-box">
+            <h3>Icon in a link</h3>
+            <p>Used when the icon represents a link action.</p>
+            <a href="#" class="{{icons.cssBaseClass}}-link">
+              <i class="{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}" aria-hidden="true"></i>
+              <span class="sr-only">{{name}}</span>
+            </a>
+            <code><pre>
+&lt;a href=&quot;#&quot;&quot; class=&quot;{{icons.cssBaseClass}}-link&quot;&gt;
+  &lt;i class=&quot;{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+  &lt;span class=&quot;sr-only&quot;&gt;{{name}}&lt;/span&gt;
+&lt;/a&gt;
+            </pre></code>
+          </div>
+
+          <div class="popover-icon-box">
+            <h3>Icon with visible text</h3>
+            <p>Used when the icon is used alongside text, for example with a link.</p>
+            <a href="#" class="{{icons.cssBaseClass}}-link">
+              <i class="{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}" aria-hidden="true"></i>
+              <span>{{name}} (or any custom text)</span>
+            </a>
+            <a href="#" class="{{icons.cssBaseClass}}-link"></a>
+          </div>
+
+          <div class="popover-icon-box">
+            <h3>Using <em>&lt;img&gt;</em> HTML tag</h3>
+            <p>This method is not the more convenient way to use stack icons as
+              the SVG sprite used initially may change. You can ignore the hash
+              in the query string or update it after each change, but this may
+              become really tedious.</p>
+            <img src="{{{example}}}#{{name}}" class="{{icons.cssBaseClass}}--img {{icons.cssBaseClass}}--img-{{name}}" alt="{{name}}">
             <code>&lt;img src=&quot;{{{example}}}#{{name}}&quot; class=&quot;{{icons.cssBaseClass}}--img {{icons.cssBaseClass}}--img-{{name}}&quot; alt=&quot;{{name}}&quot;&gt;</code>
+          </div>
         </div>
-        </li>
+      </div>
+    </li>
     {{/shapes}}
-    </ul>
-
-    <!--
-    ====================================================================================================
-    -->
-
-</section>
-
-<section>
-
-    <!--
-    Conventional CSS sprite
-    ====================================================================================================
-    This technique uses CSS classes to display portions of the sprite as background image of
-    appropriately sized elements.
-    -->
-
-    <ul>
-    {{#shapes}}
-        <li title="{{name}}">
-            <div class="icon-box">
-                <i class="{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}">{{name}}</i>
-            </div>
-            <h2>{{name}}</h2>
-            <button class="popover" popovertarget="{{icons.cssBaseClass}}-{{name}}-popover">See code widget</button>
-            <div popover id="{{icons.cssBaseClass}}-{{name}}-popover">
-                <div class="popover-inner">
-                    <div class="popover-icon-box">
-                        <h3>Illustrative icon</h3>
-                        <p>Used when the icon is purely decorative and doesn't convey essential information, as it is hidden from screen readers. Such icon should be used with adjacent text or context.</p>
-                        <i class="stack-icon icon-email" aria-hidden="true"></i>
-                        <code>&lt;i class=&quot;{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;</code>
-                    </div>
-
-                    <div class="popover-icon-box">
-                        <h3>Non-illustrative icon recognized by screen readers</h3>
-                        <p>Used when the icon is not purely decorative and conveys essential information.</p>
-                        <i class="{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}">{{name}}</i>
-                        <code>&lt;i class=&quot;{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}&quot;&gt;{{name}}&lt;/i&gt;</code>
-                    </div>
-
-                    <div class="popover-icon-box">
-                        <h3>Icon-Only Button</h3>
-                        <p>Used when the icon serves as a button without visible text.</p>
-                        <button type="button" class="{{icons.cssBaseClass}}-button" aria-label="{{name}}">
-                            <i class="{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}" aria-hidden="true"></i>
-                        </button>
-                        <code>
-                            &lt;button type=&quot;button&quot; class=&quot;{{icons.cssBaseClass}}-button&quot; aria-label=&quot;{{name}}&quot;&gt;
-                            &lt;i class=&quot;{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
-                            &lt;/button&gt;
-                        </code>
-                        <p>A simpler version:</p>
-                        <code>
-                            <button type="button" class="{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}" aria-label="Send email"></button>
-                        </code>
-                    </div>
-
-                    <div class="popover-icon-box">
-                        <h3>Icon in a link</h3>
-                        <p>Used when the icon represents a link action.</p>
-                        <a href="#" class="{{icons.cssBaseClass}}-link">
-                            <i class="{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}" aria-hidden="true"></i>
-                            <span class="sr-only">{{name}}</span>
-                        </a>
-                    </div>
-
-                    <div class="popover-icon-box">
-                        <h3>Icon with visible text</h3>
-                        <p>Used when the icon is used alongside text, for example with a link.</p>
-                        <a href="#" class="{{icons.cssBaseClass}}-link">
-                            <i class="{{icons.cssBaseClass}} {{icons.prefix}}-{{name}}" aria-hidden="true"></i>
-                            <span>{{name}} (or any custom text)</span>
-                        </a>
-                        <a href="#" class="{{icons.cssBaseClass}}-link"></a>
-                    </div>
-                </div>
-            </div>
-        </li>
-    {{/shapes}}
-    </ul>
-
-    <!--
-    ====================================================================================================
-    -->
-
+  </ul>
 </section>
 
 <footer>
-    <p>Generated at {{date}} by <a href="https://github.com/svg-sprite/svg-sprite" target="_blank" rel="noopener noreferrer">svg-sprite</a>.</p>
+  <p>Generated at {{date}} by <a href="https://github.com/svg-sprite/svg-sprite" target="_blank" rel="noopener noreferrer">svg-sprite</a>.</p>
 </footer>
 </body>
 </html>

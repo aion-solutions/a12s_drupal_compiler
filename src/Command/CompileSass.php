@@ -14,6 +14,9 @@ use Symfony\Component\Process\Process;
 class CompileSass extends BaseCommand
 {
 
+  /**
+   * @inheritDoc
+   */
   protected function configure(): void
   {
     $this
@@ -21,15 +24,20 @@ class CompileSass extends BaseCommand
       ->setDescription('Compiles SASS files using a Docker container.')
       ->setDefinition([
         new InputArgument('sources-path', InputArgument::OPTIONAL, 'The path to the folder containing the sources to compile'),
-        new InputOption('package-manager', null, InputOption::VALUE_REQUIRED, 'The package manager to use (npm, yarn, pnpm)', 'yarn'),
-        new InputOption('nodejs-version', null, InputOption::VALUE_REQUIRED, 'The Node.js version to use', 'lts'),
-        new InputOption('base-image', null, InputOption::VALUE_REQUIRED, 'The base Docker image variant (alpine, slim, bullseye, bookworm)', 'alpine'),
-        new InputOption('node-modules-path', null, InputOption::VALUE_REQUIRED, 'The path to the node_modules directory'),
+        new InputOption('package-manager', 'pm', InputOption::VALUE_REQUIRED, 'The package manager to use (npm, yarn, pnpm)', 'yarn'),
+        new InputOption('nodejs-version', 'njs', InputOption::VALUE_REQUIRED, 'The Node.js version to use', 'lts'),
+        new InputOption('base-image', 'i', InputOption::VALUE_REQUIRED, 'The base Docker image variant (alpine, slim, bullseye, bookworm)', 'alpine'),
+        new InputOption('node-modules-path', 'p', InputOption::VALUE_REQUIRED, 'The path to the node_modules directory'),
+        new InputOption('remove-docker-image', 'rmi', InputOption::VALUE_REQUIRED, 'Whether to remove the Docker image after processing', false),
+        new InputOption('color-output', 'c', InputOption::VALUE_REQUIRED, 'Whether to enable color output', true),
       ])
       ->setHelp($this->getHelp())
     ;
   }
 
+  /**
+   * @inheritdoc
+   */
   protected function execute(InputInterface $input, OutputInterface $output): int
   {
     $composer = $this->requireComposer();
@@ -41,6 +49,8 @@ class CompileSass extends BaseCommand
     $packageManager = $input->getOption('package-manager');
     $nodejsVersion = $input->getOption('nodejs-version');
     $baseImage = $input->getOption('base-image');
+    $removeDockerImage = $input->getOption('remove-docker-image');
+    $colorOutput = $input->getOption('color-output');
 
     // Validate package manager
     if (!\in_array($packageManager, ['npm', 'yarn', 'pnpm'], true)) {
@@ -103,24 +113,37 @@ class CompileSass extends BaseCommand
     }
 
     $a12sCompileDir = realpath(dirname(dirname(__DIR__)));
-
     $output->writeln('<info>$a12sCompileDir:</info> ' . $a12sCompileDir);
 
     // @todo manage optional parameters for:
     //   - build-dev
     //   - build-css
     //   - ...
+
+    // Define a random container name to be able to remove it if the "docker
+    // run" command exits with an error.
+    $containerName = 'a12s-build-' . \substr(\sha1($imageTag . microtime(true)), 0, 12);
+
     // Build Docker command
     $dockerCommand = [
       'docker', 'run', '--rm',
+      '--name', $containerName,
       '-v', "{$a12sCompileDir}/build:/app",
       '-v', "{$absoluteSourcesPath}:/app/sources",
       '-v', "{$absoluteNodeModulesPath}:/app/node_modules",
       '-w', '/app',
+      ];
+
+    $this->appendToDockerCommandIf($colorOutput, $dockerCommand, [
+      '-e', 'FORCE_COLOR=1',
+      '-e', 'TERM=xterm-256color',
+    ]);
+
+    $this->appendToDockerCommand($dockerCommand, [
       $imageTag,
       '/bin/sh', '-c',
       "{$packageManager} install && {$packageManager} run build",
-    ];
+    ]);
 
     $output->writeln('<info>Executing Docker command:</info>');
     $output->writeln(\implode(' ', \array_map('escapeshellarg', $dockerCommand)));
@@ -129,11 +152,63 @@ class CompileSass extends BaseCommand
     // Execute Docker command
     $process = new Process($dockerCommand, $rootDir);
     $process->setTty(true);
-    $exitCode = $process->run(function ($type, $buffer) use ($output) {
-      $output->write($buffer);
-    });
+    $exitCode = 1;
+
+    try {
+      $exitCode = $process->run(function ($type, $buffer) use ($output) {
+        $output->write($buffer, false, OutputInterface::OUTPUT_RAW);
+      });
+    }
+    finally {
+      if ($exitCode !== 0) {
+        $output->writeln('<info>Removing Docker container after failure</info>');
+        $cleanupCommand = ['docker', 'rm', '-f', $containerName];
+        $cleanupProcess = new Process($cleanupCommand, $rootDir);
+        $cleanupProcess->setTty(false);
+        $cleanupProcess->run();
+      }
+
+      if (!empty($removeDockerImage)) {
+        $output->writeln('<info>Removing Docker image:</info>', $imageTag);
+        $removeImageCommand = ['docker', 'image', 'rm', '-f', $imageTag];
+        $removeImageProcess = new Process($removeImageCommand, $rootDir);
+        $removeImageProcess->setTty(false);
+        $removeImageProcess->run();
+      }
+    }
 
     return $exitCode;
+  }
+
+  /**
+   * Appends commands to the Docker command array.
+   *
+   * @param array $dockerCommand
+   *   The Docker command array to append to.
+   * @param array $commands
+   *   The commands to append.
+   */
+  private function appendToDockerCommand(array &$dockerCommand, array $commands): void
+  {
+    $dockerCommand = \array_merge($dockerCommand, $commands);
+  }
+
+  /**
+   * Appends commands to the Docker command array if a condition is met.
+   *
+   * @param bool $condition
+   *   The condition to check.
+   * @param array $dockerCommand
+   *   The Docker command array to append to.
+   * @param array $commands
+   *   The commands to append if the condition is met.
+   *
+   * @return void`
+   */
+  private function appendToDockerCommandIf(bool $condition, array &$dockerCommand, array $commands): void {
+    if ($condition) {
+      $this->appendToDockerCommand($dockerCommand, $commands);
+    }
   }
 
   /**

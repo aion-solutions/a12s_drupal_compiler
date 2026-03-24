@@ -21,18 +21,18 @@
 }
 
 <% if (useRootVariables && !defineDimensionsInClasses) { -%>
-@each $id in $<%= prefix %>--names {
+@each $alias, $id in <%= modules.settings %>.$<%= prefix %>--names {
   .#{$id} {
-    background-image: var(#{'--' + $id + '-url'});
+    mask-image: var(#{'--' + $id + '-url'});
   }
 }
 <% } else { -%>
 <% icons.forEach(function(icon, id) { -%>
 .#{<%= modules.settings %>.$<%= prefix %>-prefix}<%= id %> {
 <% if (useRootVariables) { -%>
-  background-image: var(--<%= prefix %>-<%= id %>-url);
+  mask-image: var(--<%= prefix %>-<%= id %>-url);
 <% } else { -%>
-  background-image: url(#{ $relative-path + '<%= spriteFileName %>#<%= id %>' });
+  mask-image: url(#{ $relative-path + '<%= spriteFileName %>#<%= id %>' });
 <% } -%>
 <% if (!dimensions && defineDimensionsInClasses) { -%>
   height: <%= icon.height %>px;

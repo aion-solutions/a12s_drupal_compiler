@@ -1,8 +1,12 @@
+@use "sass:list";
 @use "sass:map";
+@use "sass:meta";
 @use "<%= relativePaths.mixins.toSettings %>";
 $<%= prefix %>-default-color: black !default;
+<% var heightDefault = (useRootVariables && dimensions) ? 'var(--' + prefix + '-height)' : 'null'; %>
+<% var widthDefault = (useRootVariables && dimensions) ? 'var(--' + prefix + '-width)' : 'null'; %>
 
-@mixin <%= prefix %>-base($color: $<%= prefix %>-default-color, $display: inline-block, $height: null, $width: null) {
+@mixin <%= prefix %>-base($color: $<%= prefix %>-default-color, $display: inline-block, $height: <%= heightDefault %>, $width: <%= widthDefault %>) {
   background-color: $color;
   display: $display;
   height: $height;
@@ -34,7 +38,8 @@ $<%= prefix %>-default-color: black !default;
  * @param {String} $pseudo [before] - `before` | `after` The pseudo element to place the icon in.
  * @todo Allow `$pseudo: false` to be declared so we don't have to use a pseudo element if we don't want to.
  * @param {Bool} $text-replace [false]
- * @param {String} $size [inherit]
+ * @param {String} $height
+ * @param {String} $width
  * @param {String} $color [inherit]
  * @param {String} $display [inline-block]
  *
@@ -46,22 +51,24 @@ $<%= prefix %>-default-color: black !default;
 @mixin <%= prefix %>(
   $icon: null,
   $pseudo: before,
-  $text-replace: false,
-  $size: inherit,
   $color: $<%= prefix %>-default-color,
+  $height: <%= heightDefault %>,
+  $width: <%= widthDefault %>,
+  $text-replace: false,
   $display: inline-block
 ) {
   @if map.has-key(<%= modules.settings %>.$<%= prefix %>--names %>, $icon) {
     @if $pseudo {
       &:#{$pseudo} {
-        @include <%= prefix %>-base($color, $display);
-        mask-clip: var(#{'--' + map.get(<%= modules.settings %>.$<%= prefix %>--names %>, $icon)});
+        content: '';
+        @include <%= prefix %>-base($color, $display, $height, $width);
+        @include <%= prefix %>-mask($icon);
         @content;
       }
     }
     @else {
-      @include <%= prefix %>-base($color, $display);
-      mask-clip: var(#{'--' + map.get(<%= modules.settings %>.$<%= prefix %>--names, $icon)});
+      @include <%= prefix %>-base($color, $display, $height, $width);
+      @include <%= prefix %>-mask($icon);
       @content;
     }
 
@@ -69,5 +76,35 @@ $<%= prefix %>-default-color: black !default;
     @if $text-replace {
       @include <%= prefix %>-replace($pseudo);
     }
+  }
+}
+
+/**
+ * Stack Icons mask mixin.
+ */
+@mixin <%= prefix %>-mask($icon: null) {
+  @if map.has-key(<%= modules.settings %>.$<%= prefix %>--names %>, $icon) {
+    mask-image: var(#{'--' + map.get(<%= modules.settings %>.$<%= prefix %>--names, $icon) + '-url'});
+  }
+}
+
+/**
+ * Write icon properties from a map.
+ *
+ * @param {Map} $map - Map of properties.
+ */
+@mixin <%= prefix %>-from-map($map) {
+  @if meta.type-of($map) == 'string' {
+    @include <%= prefix %>($icon: $map);
+  }
+  @else if meta.type-of($map) == 'map' {
+    $keys: (icon, pseudo, color, height, width, text-replace, display);
+    $args: ();
+    @each $key, $value in $map {
+      @if list.index($keys, $key) {
+        $args: map.set($args, $key, $value);
+      }
+    }
+    @include <%= prefix %>($args...);
   }
 }

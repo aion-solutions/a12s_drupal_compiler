@@ -71,6 +71,9 @@ svgSprite:
           # Prefix for CSS class names and root variables.
           # @todo change this name as it is more than a prefix.
           prefix: '%mode%-icon'
+          # @todo remove this when recursive merge os the configuration is
+          #   implemented properly.
+          defineDimensionsInClasses: false
 
 #
 # SASS configuration.

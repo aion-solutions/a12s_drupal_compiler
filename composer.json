@@ -2,6 +2,7 @@
   "name": "aion-solutions/a12s_drupal_compiler",
   "type": "composer-plugin",
   "description": "Helper for compiling SASS files and generate font icons.",
+  "license": "GPL-2.0-or-later",
   "require": {
     "composer-plugin-api": "^2.0"
   },

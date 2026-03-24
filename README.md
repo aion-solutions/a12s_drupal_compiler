@@ -2,7 +2,6 @@
 
 ## Features
 
-- **Docker Container Management**: Creates temporary containers with automatic cleanup (`--rm`)
 - **Package Manager Support**: Defaults to `yarn`, but supports `npm` and `pnpm`
 - **Node.js Version Flexibility**: Configurable Node.js version (default: ) `lts`
 - **Docker Image Variants**: Supports `alpine`, `slim`, `bullseye`, and `bookworm` (default: `alpine`)
@@ -15,6 +14,7 @@
 - **Error Handling**: Validates options and provides clear error messages
 - The command is invoked from the Composer root directory and displays the
   Docker command before execution, making it transparent and debuggable.
+- **Docker Container Management**: Creates temporary containers with automatic cleanup (`--rm`)
 
 ### SCSS compilation
 
@@ -22,7 +22,7 @@
 
 SVG files → SVGO (optimize) → gulp-svg-sprite (create sprite)
 
-The optimization step is optional, but enabled by default.
+The optimization step is optional but enabled by default.
 
 *Configuration*:
 
@@ -34,11 +34,11 @@ The svg-sprite section includes common SVGO plugins organized by category:
 - Preservation - Keeps viewBox for responsive scaling
 
 Sprite Generation (Modes):
-- symbol mode - Best for flexible usage with CSS, <img> tags, and <svg><use> elements
+- symbol mode - Best for flexible usage with CSS, `<img>` tags, and `<svg><use>` elements
 - inline: false - Generates a separate sprite file (recommended for caching)
 - example: false - Set to true to generate an HTML preview of available symbols
 
-## Developpment
+## Development
 
 ### Example for testing the help command
 
