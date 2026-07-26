@@ -18,6 +18,12 @@
 
 ### SCSS compilation
 
+The assets compilation is performed using the following Composer command:
+
+```shell
+composer a12s-compile-sass
+```
+
 ### SVG sprite generation
 
 SVG files → SVGO (optimize) → gulp-svg-sprite (create sprite)
